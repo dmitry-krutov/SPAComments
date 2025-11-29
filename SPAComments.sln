@@ -1,0 +1,41 @@
+
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SPAComments.Web", "src\SPAComments\SPAComments.Web\SPAComments.Web.csproj", "{9D712AD6-4123-4ECE-8588-DF0FC577852A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CommentsModule", "CommentsModule", "{391B3440-801B-4C2D-A27A-1AE08290863F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SPAComments.CommentsModule.Domain", "src\SPAComments\CommentsModule\SPAComments.CommentsModule.Domain\SPAComments.CommentsModule.Domain.csproj", "{17842763-DF1C-4035-A447-8AD80931C58C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SPAComments.CommentsModule.Application", "src\SPAComments\CommentsModule\SPAComments.CommentsModule.Application\SPAComments.CommentsModule.Application.csproj", "{2B85AE77-817E-4BFE-A69E-16D8909877E6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SPAComments.CommentsModule.Infrastructure", "src\SPAComments\CommentsModule\SPAComments.CommentsModule.Infrastructure\SPAComments.CommentsModule.Infrastructure.csproj", "{BBFF2498-F7D4-45A1-B469-EAA3064A8AEF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9D712AD6-4123-4ECE-8588-DF0FC577852A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9D712AD6-4123-4ECE-8588-DF0FC577852A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9D712AD6-4123-4ECE-8588-DF0FC577852A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9D712AD6-4123-4ECE-8588-DF0FC577852A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17842763-DF1C-4035-A447-8AD80931C58C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17842763-DF1C-4035-A447-8AD80931C58C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17842763-DF1C-4035-A447-8AD80931C58C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17842763-DF1C-4035-A447-8AD80931C58C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B85AE77-817E-4BFE-A69E-16D8909877E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B85AE77-817E-4BFE-A69E-16D8909877E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B85AE77-817E-4BFE-A69E-16D8909877E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B85AE77-817E-4BFE-A69E-16D8909877E6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BBFF2498-F7D4-45A1-B469-EAA3064A8AEF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BBFF2498-F7D4-45A1-B469-EAA3064A8AEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BBFF2498-F7D4-45A1-B469-EAA3064A8AEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BBFF2498-F7D4-45A1-B469-EAA3064A8AEF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{17842763-DF1C-4035-A447-8AD80931C58C} = {391B3440-801B-4C2D-A27A-1AE08290863F}
+		{2B85AE77-817E-4BFE-A69E-16D8909877E6} = {391B3440-801B-4C2D-A27A-1AE08290863F}
+		{BBFF2498-F7D4-45A1-B469-EAA3064A8AEF} = {391B3440-801B-4C2D-A27A-1AE08290863F}
+	EndGlobalSection
+EndGlobal
