@@ -17,8 +17,13 @@ public class CommentId : ComparableValueObject
 
     public static CommentId Create(Guid id) => new(id);
 
-    public static Result<CommentId, Error> TryCreate(Guid id) =>
-        Result.Success<CommentId, Error>(new(id));
+    public static Result<CommentId, Error> TryCreate(Guid? id)
+    {
+        if (!id.HasValue)
+            return GeneralErrors.Validation.ValueIsRequired(nameof(CommentId));
+
+        return TryCreate(id.Value);
+    }
 
     protected override IEnumerable<IComparable> GetComparableEqualityComponents()
     {

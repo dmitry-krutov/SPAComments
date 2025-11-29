@@ -6,6 +6,8 @@ namespace SPAComments.CommentsModule.Domain.ValueObjects;
 
 public sealed class Email : ComparableValueObject
 {
+    public const int MAX_LENGTH = 320;
+
     private static readonly Regex EmailPattern =
         new(@"^[A-Za-z0-9._%+\-]+@[A-Za-z0-9.\-]+\.[A-Za-z]{2,}$", RegexOptions.Compiled);
 
@@ -23,8 +25,8 @@ public sealed class Email : ComparableValueObject
 
         var trimmed = value.Trim();
 
-        if (trimmed.Length > 320)
-            return GeneralErrors.Validation.ValueTooLong(nameof(Email), 320);
+        if (trimmed.Length > MAX_LENGTH)
+            return GeneralErrors.Validation.ValueTooLong(nameof(Email), MAX_LENGTH);
 
         if (!EmailPattern.IsMatch(trimmed))
             return GeneralErrors.Validation.InvalidFormat(nameof(Email), "Must be a valid email address");
