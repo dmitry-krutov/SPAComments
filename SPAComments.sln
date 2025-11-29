@@ -10,6 +10,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SPAComments.CommentsModule.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SPAComments.CommentsModule.Infrastructure", "src\SPAComments\CommentsModule\SPAComments.CommentsModule.Infrastructure\SPAComments.CommentsModule.Infrastructure.csproj", "{BBFF2498-F7D4-45A1-B469-EAA3064A8AEF}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{7C81A80F-1F69-4B30-A81B-9F3A374749BF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SPAComments.SharedKernel", "src\SPAComments.Shared\SPAComments.SharedKernel\SPAComments.SharedKernel.csproj", "{BE840F02-3891-44A9-B644-BAB9109ED57B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4B6DEC23-4B0B-4214-8819-D7918B005AAE}"
+	ProjectSection(SolutionItems) = preProject
+		Directory.Build.props = Directory.Build.props
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,10 +42,15 @@ Global
 		{BBFF2498-F7D4-45A1-B469-EAA3064A8AEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BBFF2498-F7D4-45A1-B469-EAA3064A8AEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BBFF2498-F7D4-45A1-B469-EAA3064A8AEF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE840F02-3891-44A9-B644-BAB9109ED57B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE840F02-3891-44A9-B644-BAB9109ED57B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE840F02-3891-44A9-B644-BAB9109ED57B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE840F02-3891-44A9-B644-BAB9109ED57B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{17842763-DF1C-4035-A447-8AD80931C58C} = {391B3440-801B-4C2D-A27A-1AE08290863F}
 		{2B85AE77-817E-4BFE-A69E-16D8909877E6} = {391B3440-801B-4C2D-A27A-1AE08290863F}
 		{BBFF2498-F7D4-45A1-B469-EAA3064A8AEF} = {391B3440-801B-4C2D-A27A-1AE08290863F}
+		{BE840F02-3891-44A9-B644-BAB9109ED57B} = {7C81A80F-1F69-4B30-A81B-9F3A374749BF}
 	EndGlobalSection
 EndGlobal
