@@ -9,6 +9,20 @@
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.9"/>
         <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="10.0.0" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.6" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\SPAComments.Shared\SPAComments.Core\SPAComments.Core.csproj" />
+      <ProjectReference Include="..\..\SPAComments.Shared\SPAComments.Framework\SPAComments.Framework.csproj" />
+      <ProjectReference Include="..\..\SPAComments.Shared\SPAComments.SharedKernel\SPAComments.SharedKernel.csproj" />
+      <ProjectReference Include="..\CaptchaModule\SPAComments.CaptchaModule.Application\SPAComments.CaptchaModule.Application.csproj" />
+      <ProjectReference Include="..\CaptchaModule\SPAComments.CaptchaModule.Infrastructure\SPAComments.CaptchaModule.Infrastructure.csproj" />
+      <ProjectReference Include="..\CaptchaModule\SPAComments.CaptchaModule.Presentation\SPAComments.CaptchaModule.Presentation.csproj" />
+      <ProjectReference Include="..\CommentsModule\SPAComments.CommentsModule.Application\SPAComments.CommentsModule.Application.csproj" />
+      <ProjectReference Include="..\CommentsModule\SPAComments.CommentsModule.Domain\SPAComments.CommentsModule.Domain.csproj" />
+      <ProjectReference Include="..\CommentsModule\SPAComments.CommentsModule.Infrastructure\SPAComments.CommentsModule.Infrastructure.csproj" />
+      <ProjectReference Include="..\CommentsModule\SPAComments.CommentsModule.Presentation\SPAComments.CommentsModule.Presentation.csproj" />
     </ItemGroup>
 
 </Project>

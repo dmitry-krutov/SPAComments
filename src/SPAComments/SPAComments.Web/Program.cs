@@ -1,4 +1,18 @@
+using SPAComments.CaptchaModule.Infrastructure;
+using SPAComments.CaptchaModule.Presentation;
+using SPAComments.CommentsModule.Application;
+using SPAComments.CommentsModule.Infrastructure;
+using SPAComments.Core.Mappings;
+using SPAComments.Framework.Middlewares;
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services
+    .AddCommentsModuleInfrastructure(builder.Configuration)
+    .AddCommentsModuleApplication(builder.Configuration)
+    .AddCaptchaModule(builder.Configuration);
+
+builder.Services.AddAutoMapper(cfg => { }, typeof(AssemblyMappingProfile).Assembly);
 
 builder.Services.AddStackExchangeRedisCache(options =>
 {
@@ -6,15 +20,23 @@ builder.Services.AddStackExchangeRedisCache(options =>
     options.InstanceName = "spa-comments:";
 });
 
-builder.Services.AddOpenApi();
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+app.UseExceptionMiddleware();
+
+
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
+app.MapControllers();
+app.MapCaptchaEndpoints();
 
 app.Run();

@@ -18,6 +18,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		Directory.Build.props = Directory.Build.props
 		.editorconfig = .editorconfig
+		init.sql = init.sql
+		compose.yaml = compose.yaml
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SPAComments.Core", "src\SPAComments.Shared\SPAComments.Core\SPAComments.Core.csproj", "{2BDF9BD3-8F81-4C7A-9298-FBBC4328C2E7}"
@@ -31,6 +33,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SPAComments.Framework", "src\SPAComments.Shared\SPAComments.Framework\SPAComments.Framework.csproj", "{3E2196C2-9683-425E-AF34-05322FB88E0E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SPAComments.CaptchaModule.Presentation", "src\SPAComments\CaptchaModule\SPAComments.CaptchaModule.Presentation\SPAComments.CaptchaModule.Presentation.csproj", "{43E90CC2-400D-4F9E-841A-9B2207C36986}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SPAComments.CommentsModule.Presentation", "src\SPAComments\CommentsModule\SPAComments.CommentsModule.Presentation\SPAComments.CommentsModule.Presentation.csproj", "{141D7AB1-DDB9-4555-A407-8F999F2AEB04}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -78,6 +82,10 @@ Global
 		{43E90CC2-400D-4F9E-841A-9B2207C36986}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{43E90CC2-400D-4F9E-841A-9B2207C36986}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{43E90CC2-400D-4F9E-841A-9B2207C36986}.Release|Any CPU.Build.0 = Release|Any CPU
+		{141D7AB1-DDB9-4555-A407-8F999F2AEB04}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{141D7AB1-DDB9-4555-A407-8F999F2AEB04}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{141D7AB1-DDB9-4555-A407-8F999F2AEB04}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{141D7AB1-DDB9-4555-A407-8F999F2AEB04}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{17842763-DF1C-4035-A447-8AD80931C58C} = {391B3440-801B-4C2D-A27A-1AE08290863F}
@@ -89,5 +97,6 @@ Global
 		{7C092908-0054-4861-AB77-35C6AF897826} = {7884BE30-0647-4210-8C73-EC3CF956EA68}
 		{3E2196C2-9683-425E-AF34-05322FB88E0E} = {7C81A80F-1F69-4B30-A81B-9F3A374749BF}
 		{43E90CC2-400D-4F9E-841A-9B2207C36986} = {7884BE30-0647-4210-8C73-EC3CF956EA68}
+		{141D7AB1-DDB9-4555-A407-8F999F2AEB04} = {391B3440-801B-4C2D-A27A-1AE08290863F}
 	EndGlobalSection
 EndGlobal
