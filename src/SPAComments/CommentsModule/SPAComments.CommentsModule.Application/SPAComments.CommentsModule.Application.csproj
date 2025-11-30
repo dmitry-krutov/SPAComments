@@ -8,6 +8,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\..\SPAComments.Shared\SPAComments.Core\SPAComments.Core.csproj" />
+      <ProjectReference Include="..\..\CaptchaModule\SPAComments.CaptchaModule.Application\SPAComments.CaptchaModule.Application.csproj" />
       <ProjectReference Include="..\SPAComments.CommentsModule.Domain\SPAComments.CommentsModule.Domain.csproj" />
     </ItemGroup>
 

@@ -17,6 +17,10 @@ public class CreateCommentCommand : ICommand, IHasCommentText
 
     public required string Text { get; set; }
 
+    public required Guid CaptchaId { get; init; }
+
+    public required string CaptchaAnswer { get; init; }
+
 
     public CommentId? ParentIdVo { get; set; }
 

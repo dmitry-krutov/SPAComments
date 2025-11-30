@@ -1,8 +1,7 @@
-using CSharpFunctionalExtensions;
 using FluentValidation;
+using SPAComments.CaptchaModule.Application;
 using SPAComments.CommentsModule.Domain.ValueObjects;
 using SPAComments.Core.Validation;
-using SPAComments.SharedKernel;
 using SPAComments.SharedKernel.ValueObjects.Ids;
 
 namespace SPAComments.CommentsModule.Application.Features.Commands.CreateComment;
@@ -27,5 +26,13 @@ public class CreateCommentCommandValidator : AbstractValidator<CreateCommentComm
 
         RuleFor(x => x.Text)
             .MustBeValueObject(Text.Create, (cmd, vo) => cmd.TextVo = vo);
+
+        RuleFor(x => x.CaptchaId)
+            .NotEmpty()
+            .WithError(CaptchaErrors.CaptchaIdRequired);
+
+        RuleFor(x => x.CaptchaAnswer)
+            .NotEmpty()
+            .WithError(CaptchaErrors.CaptchaAnswerRequired);
     }
 }
