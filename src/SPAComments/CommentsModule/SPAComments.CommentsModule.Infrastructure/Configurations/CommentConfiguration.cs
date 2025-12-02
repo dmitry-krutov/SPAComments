@@ -67,5 +67,25 @@ public sealed class CommentConfiguration : IEntityTypeConfiguration<Comment>
         builder.Property(x => x.UpdatedAt)
             .HasColumnType("timestamp with time zone")
             .IsRequired(false);
+
+        builder.Navigation(x => x.Attachments)
+            .UsePropertyAccessMode(PropertyAccessMode.Field);
+
+        builder.OwnsMany<CommentAttachment>(
+            x => x.Attachments,
+            nav =>
+            {
+                nav.ToTable("comment_attachments", "comments");
+
+                nav.WithOwner().HasForeignKey("comment_id");
+
+                nav.Property<Guid>("Id");
+                nav.HasKey("Id");
+
+                nav.Property(a => a.FileId)
+                    .HasColumnName("file_id")
+                    .HasColumnType("uuid")
+                    .IsRequired();
+            });
     }
 }

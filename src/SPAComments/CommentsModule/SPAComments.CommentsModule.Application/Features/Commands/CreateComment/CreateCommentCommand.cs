@@ -21,6 +21,8 @@ public class CreateCommentCommand : ICommand, IHasCommentText
 
     public required string CaptchaAnswer { get; init; }
 
+    public IReadOnlyCollection<Guid>? AttachmentIds { get; init; }
+
 
     public CommentId? ParentIdVo { get; set; }
 

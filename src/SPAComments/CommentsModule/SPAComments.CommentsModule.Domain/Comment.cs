@@ -6,6 +6,8 @@ namespace SPAComments.CommentsModule.Domain;
 
 public class Comment : DomainEntity<CommentId>
 {
+    private readonly List<CommentAttachment> _attachments = new();
+
     public Comment(
         CommentId id,
         CommentId? parentCommentId,
@@ -13,7 +15,8 @@ public class Comment : DomainEntity<CommentId>
         Email email,
         HomePage? homePage,
         Text text,
-        DateTime createdAt)
+        DateTime createdAt,
+        IReadOnlyCollection<CommentAttachment>? attachments = null)
         : base(id)
     {
         ParentCommentId = parentCommentId;
@@ -22,6 +25,9 @@ public class Comment : DomainEntity<CommentId>
         HomePage = homePage;
         Text = text;
         CreatedAt = createdAt;
+
+        if (attachments is not null && attachments.Count > 0)
+            _attachments.AddRange(attachments);
     }
 
     private Comment(CommentId id)
@@ -42,4 +48,6 @@ public class Comment : DomainEntity<CommentId>
     public DateTime CreatedAt { get; private set; }
 
     public DateTime? UpdatedAt { get; private set; }
+
+    public IReadOnlyCollection<CommentAttachment> Attachments => _attachments.AsReadOnly();
 }

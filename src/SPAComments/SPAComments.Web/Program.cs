@@ -1,3 +1,4 @@
+using FileService.Communication;
 using SPAComments.CaptchaModule.Infrastructure;
 using SPAComments.CaptchaModule.Presentation;
 using SPAComments.CommentsModule.Application;
@@ -11,6 +12,8 @@ builder.Services
     .AddCommentsModuleInfrastructure(builder.Configuration)
     .AddCommentsModuleApplication(builder.Configuration)
     .AddCaptchaModule(builder.Configuration);
+
+builder.Services.AddFileServiceClient(builder.Configuration);
 
 builder.Services.AddAutoMapper(cfg => { }, typeof(AssemblyMappingProfile).Assembly);
 

@@ -18,4 +18,6 @@ public class CreateCommentRequest : IMapTo<CreateCommentCommand>
     public required Guid CaptchaId { get; init; }
 
     public required string CaptchaAnswer { get; init; }
+
+    public List<Guid>? AttachmentIds { get; init; }
 }

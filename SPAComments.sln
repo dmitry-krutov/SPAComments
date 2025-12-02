@@ -28,14 +28,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SPAComments.CaptchaModule.P
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SPAComments.CommentsModule.Presentation", "src\SPAComments\CommentsModule\SPAComments.CommentsModule.Presentation\SPAComments.CommentsModule.Presentation.csproj", "{141D7AB1-DDB9-4555-A407-8F999F2AEB04}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FileService", "FileService", "{CE460CA8-9CBC-444C-B359-904876B34CCE}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileService", "src\SPAComments.FileService\src\FileService\FileService.csproj", "{7B547DB4-30BF-4A85-9E21-888522D6057C}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileService.Contracts", "src\SPAComments.FileService\src\FileService.Contracts\FileService.Contracts.csproj", "{8FE53793-E9D9-4C33-A1E9-A85C0B03C7C0}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileService.Communication", "src\SPAComments.FileService\src\FileService.Communication\FileService.Communication.csproj", "{04F9C7DE-6313-4C11-97AE-58D89F9C139A}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -74,18 +66,6 @@ Global
 		{141D7AB1-DDB9-4555-A407-8F999F2AEB04}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{141D7AB1-DDB9-4555-A407-8F999F2AEB04}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{141D7AB1-DDB9-4555-A407-8F999F2AEB04}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7B547DB4-30BF-4A85-9E21-888522D6057C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7B547DB4-30BF-4A85-9E21-888522D6057C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7B547DB4-30BF-4A85-9E21-888522D6057C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7B547DB4-30BF-4A85-9E21-888522D6057C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8FE53793-E9D9-4C33-A1E9-A85C0B03C7C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8FE53793-E9D9-4C33-A1E9-A85C0B03C7C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8FE53793-E9D9-4C33-A1E9-A85C0B03C7C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8FE53793-E9D9-4C33-A1E9-A85C0B03C7C0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{04F9C7DE-6313-4C11-97AE-58D89F9C139A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{04F9C7DE-6313-4C11-97AE-58D89F9C139A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{04F9C7DE-6313-4C11-97AE-58D89F9C139A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{04F9C7DE-6313-4C11-97AE-58D89F9C139A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{17842763-DF1C-4035-A447-8AD80931C58C} = {391B3440-801B-4C2D-A27A-1AE08290863F}
@@ -95,8 +75,5 @@ Global
 		{7C092908-0054-4861-AB77-35C6AF897826} = {7884BE30-0647-4210-8C73-EC3CF956EA68}
 		{43E90CC2-400D-4F9E-841A-9B2207C36986} = {7884BE30-0647-4210-8C73-EC3CF956EA68}
 		{141D7AB1-DDB9-4555-A407-8F999F2AEB04} = {391B3440-801B-4C2D-A27A-1AE08290863F}
-		{7B547DB4-30BF-4A85-9E21-888522D6057C} = {CE460CA8-9CBC-444C-B359-904876B34CCE}
-		{8FE53793-E9D9-4C33-A1E9-A85C0B03C7C0} = {CE460CA8-9CBC-444C-B359-904876B34CCE}
-		{04F9C7DE-6313-4C11-97AE-58D89F9C139A} = {CE460CA8-9CBC-444C-B359-904876B34CCE}
 	EndGlobalSection
 EndGlobal
