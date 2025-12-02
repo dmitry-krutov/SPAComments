@@ -1,3 +1,4 @@
+using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using SPAComments.CommentsModule.Domain;
@@ -12,6 +13,8 @@ public class CommentsDbContext : DbContext
     }
 
     public DbSet<Comment> Comments => Set<Comment>();
+
+    public IQueryable<Comment> CommentsQueryable => Comments.AsQueryable();
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
