@@ -1,7 +1,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using SPAComments.CommentsModule.Application.Common;
 using SPAComments.CommentsModule.Application.Features.Commands.CreateComment;
+using SPAComments.CommentsModule.Application.Features.Common;
 using SPAComments.Core.Abstractions;
 
 namespace SPAComments.CommentsModule.Application;
