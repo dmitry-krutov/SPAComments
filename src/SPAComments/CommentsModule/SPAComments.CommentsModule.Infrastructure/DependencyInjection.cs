@@ -1,4 +1,5 @@
 using Ganss.Xss;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,6 +18,10 @@ public static class DependencyInjection
     {
         services.AddCommentContentFiltering();
 
+        services.AddCommentsMessaging(configuration);
+
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
+
         services.AddSingleton<IDateTimeProvider, SystemDateTimeProvider>();
 
         services.AddScoped<ICommentsRepository, CommentsRepository>();
@@ -28,6 +33,31 @@ public static class DependencyInjection
         {
             options.UseNpgsql(connectionString);
             options.UseSnakeCaseNamingConvention();
+        });
+
+        return services;
+    }
+
+    private static IServiceCollection AddCommentsMessaging(
+        this IServiceCollection services,
+        IConfiguration configuration)
+    {
+        services.AddMassTransit(x =>
+        {
+            x.SetKebabCaseEndpointNameFormatter();
+
+            x.AddEntityFrameworkOutbox<CommentsDbContext>(o =>
+            {
+                o.QueryDelay = TimeSpan.FromSeconds(1);
+                o.UsePostgres();
+                o.UseBusOutbox();
+            });
+
+            x.UsingRabbitMq((context, cfg) =>
+            {
+                cfg.Host(configuration.GetConnectionString("RabbitMq"));
+                cfg.ConfigureEndpoints(context);
+            });
         });
 
         return services;

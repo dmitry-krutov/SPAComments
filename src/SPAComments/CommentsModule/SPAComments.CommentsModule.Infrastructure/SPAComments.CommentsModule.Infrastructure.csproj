@@ -13,6 +13,9 @@
     <ItemGroup>
       <PackageReference Include="EFCore.NamingConventions" Version="9.0.0" />
       <PackageReference Include="HtmlSanitizer" Version="9.0.889" />
+      <PackageReference Include="MassTransit" Version="9.0.0-develop.25" />
+      <PackageReference Include="MassTransit.EntityFrameworkCore" Version="9.0.0-develop.25" />
+      <PackageReference Include="MassTransit.RabbitMQ" Version="9.0.0-develop.25" />
       <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="9.0.11" />
       <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
     </ItemGroup>

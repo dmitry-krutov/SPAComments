@@ -1,7 +1,7 @@
 using MediatR;
 using SPAComments.CommentsModule.Application.Features.Common.Dtos;
 
-namespace SPAComments.CommentsModule.Application.Events.ApplicationEvents;
+namespace SPAComments.CommentsModule.Application.Events.Application;
 
 public sealed class CommentCreatedNotification : INotification
 {

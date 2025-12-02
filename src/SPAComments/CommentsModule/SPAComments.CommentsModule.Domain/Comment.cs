@@ -1,3 +1,4 @@
+using SPAComments.CommentsModule.Domain.Events;
 using SPAComments.CommentsModule.Domain.ValueObjects;
 using SPAComments.SharedKernel;
 using SPAComments.SharedKernel.ValueObjects.Ids;
@@ -28,6 +29,16 @@ public class Comment : DomainEntity<CommentId>
 
         if (attachments is not null && attachments.Count > 0)
             _attachments.AddRange(attachments);
+
+        AddDomainEvent(new CommentCreatedDomainEvent(
+            id.Value,
+            parentCommentId?.Value,
+            userName.Value,
+            email.Value,
+            homePage?.Value,
+            text.Value,
+            createdAt,
+            attachments?.Select(a => a.FileId).ToArray() ?? Array.Empty<Guid>()));
     }
 
     private Comment(CommentId id)

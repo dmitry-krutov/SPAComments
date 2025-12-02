@@ -3,8 +3,7 @@ using FileService.Communication;
 using MediatR;
 using SPAComments.CaptchaModule.Application;
 using SPAComments.CaptchaModule.Application.Services;
-using SPAComments.CommentsModule.Application.Events;
-using SPAComments.CommentsModule.Application.Events.ApplicationEvents;
+using SPAComments.CommentsModule.Application.Events.Application;
 using SPAComments.CommentsModule.Application.Features.Common.Dtos;
 using SPAComments.CommentsModule.Application.Interfaces;
 using SPAComments.CommentsModule.Domain;
@@ -23,19 +22,22 @@ public class CreateCommentCommandHandler : ICommandHandler<CommentDto, CreateCom
     private readonly ICaptchaService _captchaService;
     private readonly IFileServiceClient _fileServiceClient;
     private readonly IPublisher _publisher;
+    private readonly IUnitOfWork _unitOfWork;
 
     public CreateCommentCommandHandler(
         ICommentsRepository repository,
         IDateTimeProvider dateTimeProvider,
         ICaptchaService captchaService,
         IFileServiceClient fileServiceClient,
-        IPublisher publisher)
+        IPublisher publisher,
+        IUnitOfWork unitOfWork)
     {
         _repository = repository;
         _dateTimeProvider = dateTimeProvider;
         _captchaService = captchaService;
         _fileServiceClient = fileServiceClient;
         _publisher = publisher;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<Result<CommentDto, ErrorList>> Handle(
@@ -106,6 +108,10 @@ public class CreateCommentCommandHandler : ICommandHandler<CommentDto, CreateCom
             attachmentVoList);
 
         await _repository.Add(comment, cancellationToken);
+
+        await _publisher.PublishDomainEvents(comment, cancellationToken);
+
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         var result = new CommentDto
         {

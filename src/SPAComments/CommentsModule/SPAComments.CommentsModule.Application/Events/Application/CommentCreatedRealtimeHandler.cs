@@ -1,7 +1,7 @@
 using MediatR;
 using SPAComments.CommentsModule.Application.Interfaces;
 
-namespace SPAComments.CommentsModule.Application.Events.ApplicationEvents;
+namespace SPAComments.CommentsModule.Application.Events.Application;
 
 public sealed class CommentCreatedRealtimeHandler
     : INotificationHandler<CommentCreatedNotification>
