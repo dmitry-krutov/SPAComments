@@ -7,13 +7,13 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\..\SPAComments.Shared\SPAComments.Core\SPAComments.Core.csproj" />
       <ProjectReference Include="..\..\CaptchaModule\SPAComments.CaptchaModule.Application\SPAComments.CaptchaModule.Application.csproj" />
       <ProjectReference Include="..\SPAComments.CommentsModule.Domain\SPAComments.CommentsModule.Domain.csproj" />
     </ItemGroup>
 
     <ItemGroup>
       <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.11" />
+      <PackageReference Include="SPAComments.Core" Version="1.0.0" />
     </ItemGroup>
 
 </Project>

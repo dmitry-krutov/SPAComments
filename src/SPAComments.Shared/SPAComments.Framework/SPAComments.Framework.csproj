@@ -1,17 +1,26 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <TargetFramework>net9.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
-    </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyName>SPAComments.Framework</AssemblyName>
+    <RootNamespace>SPAComments.Framework</RootNamespace>
+
+    <PackageId>SPAComments.Framework</PackageId>
+    <Description>Web framework helpers: base controller, middlewares, endpoint results.</Description>
+  </PropertyGroup>
+  
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
 
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App"/>
   </ItemGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\SPAComments.Core\SPAComments.Core.csproj" />
-    </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SPAComments.Core\SPAComments.Core.csproj"/>
+    <ProjectReference Include="..\SPAComments.SharedKernel\SPAComments.SharedKernel.csproj"/>
+  </ItemGroup>
 
 </Project>

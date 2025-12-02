@@ -7,7 +7,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\..\SPAComments.Shared\SPAComments.SharedKernel\SPAComments.SharedKernel.csproj" />
       <ProjectReference Include="..\FileService.Contracts\FileService.Contracts.csproj" />
     </ItemGroup>
 

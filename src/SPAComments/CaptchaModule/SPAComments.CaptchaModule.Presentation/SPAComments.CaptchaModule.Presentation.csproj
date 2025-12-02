@@ -7,8 +7,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\..\SPAComments.Shared\SPAComments.Framework\SPAComments.Framework.csproj" />
       <ProjectReference Include="..\SPAComments.CaptchaModule.Application\SPAComments.CaptchaModule.Application.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="SPAComments.Framework" Version="1.0.0" />
     </ItemGroup>
 
 </Project>
