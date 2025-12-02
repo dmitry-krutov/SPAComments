@@ -41,7 +41,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+if (!app.Environment.IsEnvironment("Docker"))
+{
+    app.UseHttpsRedirection();
+}
 app.MapControllers();
 app.MapCaptchaEndpoints();
 app.MapHub<CommentsHub>("/hubs/comments");
