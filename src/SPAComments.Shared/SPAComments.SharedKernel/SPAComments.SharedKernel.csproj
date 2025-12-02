@@ -1,14 +1,22 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <TargetFramework>net9.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
-    </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyName>SPAComments.SharedKernel</AssemblyName>
+    <RootNamespace>SPAComments.SharedKernel</RootNamespace>
 
-    <ItemGroup>
-      <PackageReference Include="CSharpFunctionalExtensions" Version="3.6.0" />
-      <PackageReference Include="MediatR" Version="14.0.0-beta-1" />
-    </ItemGroup>
+    <PackageId>SPAComments.SharedKernel</PackageId>
+    <Description>Shared kernel building blocks for SPAComments solution (Error, Result, base entities, value objects).</Description>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CSharpFunctionalExtensions" Version="3.6.0"/>
+    <PackageReference Include="MediatR" Version="14.0.0-beta-1"/>
+  </ItemGroup>
 
 </Project>

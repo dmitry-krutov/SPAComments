@@ -1,0 +1,14 @@
+<Project>
+  <PropertyGroup>
+    <Company>Dmitry Krutov</Company>
+    <Authors>Dmitry Krutov</Authors>
+
+    <TargetFramework>net9.0</TargetFramework>
+    
+    <RepositoryUrl>https://github.com/dmitry-krutov/SPAComments</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+
+    <Version>1.0.0</Version>
+  </PropertyGroup>
+</Project>

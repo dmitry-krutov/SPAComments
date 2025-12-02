@@ -16,9 +16,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\..\SPAComments.Shared\SPAComments.Core\SPAComments.Core.csproj" />
-      <ProjectReference Include="..\..\..\SPAComments.Shared\SPAComments.Framework\SPAComments.Framework.csproj" />
-      <ProjectReference Include="..\..\..\SPAComments.Shared\SPAComments.SharedKernel\SPAComments.SharedKernel.csproj" />
       <ProjectReference Include="..\FileService.Contracts\FileService.Contracts.csproj" />
     </ItemGroup>
 
