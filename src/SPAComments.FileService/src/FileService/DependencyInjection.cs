@@ -1,5 +1,6 @@
-﻿using FileService.MongoDataAccess;
-using Minio;
+﻿using Amazon.S3;
+using FileService.MongoDataAccess;
+using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 
 namespace FileService;
@@ -8,30 +9,38 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddRepositories(
         this IServiceCollection services,
-        ConfigurationManager configurations)
+        IConfiguration configuration)
     {
-        services.AddSingleton(new MongoClient(configurations.GetConnectionString("MongoConnection")));
+        var mongoConnectionString = configuration.GetConnectionString("Mongo")
+                                    ?? throw new ApplicationException("Missing Mongo connection string");
 
-        services.AddScoped<FilesRepository>();
+        services.AddSingleton<IMongoClient>(_ => new MongoClient(mongoConnectionString));
+        services.AddScoped<FileMongoDbContext>();
+        services.AddScoped<IFilesRepository, FilesRepository>();
 
         return services;
     }
 
-    public static IServiceCollection AddMinio(
-        this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddStorage(
+        this IServiceCollection services,
+        IConfiguration configuration)
     {
         services.Configure<MinioOptions>(
             configuration.GetSection(MinioOptions.MINIO));
 
-        services.AddMinio(options =>
+        services.AddSingleton<IAmazonS3>(sp =>
         {
-            var minioOptions = configuration.GetSection(MinioOptions.MINIO).Get<MinioOptions>()
-                               ?? throw new ApplicationException("Missing minio configuration");
+            var minioOptions = sp.GetRequiredService<IOptions<MinioOptions>>().Value;
 
-            options.WithEndpoint(minioOptions.Endpoint);
+            var s3Config = new AmazonS3Config
+            {
+                ServiceURL = minioOptions.Endpoint, ForcePathStyle = true, UseHttp = !minioOptions.WithSsl
+            };
 
-            options.WithCredentials(minioOptions.AccessKey, minioOptions.SecretKey);
-            options.WithSSL(minioOptions.WithSsl);
+            return new AmazonS3Client(
+                minioOptions.AccessKey,
+                minioOptions.SecretKey,
+                s3Config);
         });
 
         return services;

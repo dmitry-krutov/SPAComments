@@ -4,7 +4,7 @@ using SPAComments.SharedKernel;
 
 namespace FileService.MongoDataAccess;
 
-public class FilesRepository
+public class FilesRepository : IFilesRepository
 {
     private readonly FileMongoDbContext _dbContext;
 

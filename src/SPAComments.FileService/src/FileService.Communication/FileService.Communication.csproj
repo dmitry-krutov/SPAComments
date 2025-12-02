@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\SPAComments.Shared\SPAComments.SharedKernel\SPAComments.SharedKernel.csproj" />
+      <ProjectReference Include="..\FileService.Contracts\FileService.Contracts.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.11" />
+      <PackageReference Include="Microsoft.Extensions.Http" Version="9.0.11" />
+      <PackageReference Include="Microsoft.Extensions.Options" Version="9.0.11" />
+      <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="9.0.11" />
+    </ItemGroup>
+
+</Project>
