@@ -1,4 +1,4 @@
-using SPAComments.CommentsModule.Application.Common;
+using SPAComments.CommentsModule.Application.Features.Common;
 using SPAComments.CommentsModule.Domain.ValueObjects;
 using SPAComments.Core.Abstractions;
 using SPAComments.SharedKernel.ValueObjects.Ids;

@@ -1,6 +1,6 @@
-namespace SPAComments.CommentsModule.Application.Features.Commands.CreateComment;
+namespace SPAComments.CommentsModule.Application.Features.Common.Dtos;
 
-public sealed class CreateCommentResult
+public sealed class CommentDto
 {
     public Guid Id { get; init; }
 

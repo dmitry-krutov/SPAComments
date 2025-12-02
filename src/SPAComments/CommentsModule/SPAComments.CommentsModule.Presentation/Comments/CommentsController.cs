@@ -2,6 +2,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using SPAComments.CommentsModule.Application.Features.Commands.CreateComment;
 using SPAComments.CommentsModule.Application.Features.Commands.UploadCommentAttachment;
+using SPAComments.CommentsModule.Application.Features.Common.Dtos;
 using SPAComments.CommentsModule.Presentation.Comments.Requests;
 using SPAComments.Core.Abstractions;
 using SPAComments.Framework;
@@ -13,9 +14,9 @@ namespace SPAComments.CommentsModule.Presentation.Comments;
 public class CommentsController(IMapper mapper) : ApplicationController
 {
     [HttpPost]
-    public async Task<EndpointResult<CreateCommentResult>> AddComment(
+    public async Task<EndpointResult<CommentDto>> AddComment(
         [FromBody] CreateCommentRequest request,
-        [FromServices] ICommandHandler<CreateCommentResult, CreateCommentCommand> handler,
+        [FromServices] ICommandHandler<CommentDto, CreateCommentCommand> handler,
         CancellationToken cancellationToken)
     {
         var command = mapper.Map<CreateCommentCommand>(request);

@@ -1,4 +1,4 @@
-namespace SPAComments.CommentsModule.Application.Common;
+namespace SPAComments.CommentsModule.Application.Features.Common;
 
 public interface IHasCommentText
 {

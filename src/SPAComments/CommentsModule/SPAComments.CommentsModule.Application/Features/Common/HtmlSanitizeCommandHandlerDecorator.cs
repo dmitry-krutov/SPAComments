@@ -3,7 +3,7 @@ using SPAComments.Core.Abstractions;
 using SPAComments.Core.Security;
 using SPAComments.SharedKernel;
 
-namespace SPAComments.CommentsModule.Application.Common;
+namespace SPAComments.CommentsModule.Application.Features.Common;
 
 public sealed class HtmlSanitizeCommandHandlerDecorator<TResponse, TCommand>
     : ICommandHandler<TResponse, TCommand>
