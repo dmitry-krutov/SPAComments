@@ -1,5 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+  <PropertyGroup>
+    <AssemblyName>FileService.Contracts</AssemblyName>
+    <RootNamespace>FileService.Contracts</RootNamespace>
+
+    <PackageId>FileService.Contracts</PackageId>
+    <Description>Contracts for FileService</Description>
+  </PropertyGroup>
+  
     <PropertyGroup>
         <TargetFramework>net9.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>

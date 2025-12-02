@@ -1,21 +1,29 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <TargetFramework>net9.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
-    </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyName>FileService.Communication</AssemblyName>
+    <RootNamespace>FileService.Communication</RootNamespace>
 
-    <ItemGroup>
-      <ProjectReference Include="..\..\..\SPAComments.Shared\SPAComments.SharedKernel\SPAComments.SharedKernel.csproj" />
-      <ProjectReference Include="..\FileService.Contracts\FileService.Contracts.csproj" />
-    </ItemGroup>
+    <PackageId>FileService.Communication</PackageId>
+    <Description>Package for communication with File Service</Description>
+  </PropertyGroup>
+  
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
 
-    <ItemGroup>
-      <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.11" />
-      <PackageReference Include="Microsoft.Extensions.Http" Version="9.0.11" />
-      <PackageReference Include="Microsoft.Extensions.Options" Version="9.0.11" />
-      <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="9.0.11" />
-    </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FileService.Contracts\FileService.Contracts.csproj"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.11"/>
+    <PackageReference Include="Microsoft.Extensions.Http" Version="9.0.11"/>
+    <PackageReference Include="Microsoft.Extensions.Options" Version="9.0.11"/>
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="9.0.11"/>
+    <PackageReference Include="spacomments.sharedkernel" Version="1.0.0"/>
+  </ItemGroup>
 
 </Project>
