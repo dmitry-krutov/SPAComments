@@ -1,11 +1,15 @@
+using Elastic.Clients.Elasticsearch;
 using Ganss.Xss;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using SPAComments.CommentsModule.Application.Features.Queries.Search;
 using SPAComments.CommentsModule.Application.Interfaces;
 using SPAComments.CommentsModule.Infrastructure.DbContexts;
+using SPAComments.CommentsModule.Infrastructure.Messaging;
 using SPAComments.CommentsModule.Infrastructure.Repositories;
+using SPAComments.CommentsModule.Infrastructure.Search;
 using SPAComments.Core.Abstractions;
 using SPAComments.Core.Security;
 
@@ -19,6 +23,8 @@ public static class DependencyInjection
         services.AddCommentContentFiltering();
 
         services.AddCommentsMessaging(configuration);
+
+        services.AddCommentsSearch(configuration);
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
@@ -38,6 +44,28 @@ public static class DependencyInjection
         return services;
     }
 
+    private static IServiceCollection AddCommentsSearch(
+        this IServiceCollection services,
+        IConfiguration configuration)
+    {
+        services.AddSingleton(sp =>
+        {
+            var url = configuration["Elasticsearch:Url"];
+            if (string.IsNullOrWhiteSpace(url))
+                throw new InvalidOperationException("Elasticsearch:Url is not configured");
+
+            var settings = new ElasticsearchClientSettings(new Uri(url))
+                .DefaultIndex(configuration["Elasticsearch:CommentsIndex"] ?? "spa-comments-comments");
+
+            return new ElasticsearchClient(settings);
+        });
+
+        services.AddScoped<ICommentSearchIndexer, CommentSearchIndexer>();
+        services.AddScoped<ICommentSearchReader, CommentSearchReader>();
+
+        return services;
+    }
+
     private static IServiceCollection AddCommentsMessaging(
         this IServiceCollection services,
         IConfiguration configuration)
@@ -45,6 +73,8 @@ public static class DependencyInjection
         services.AddMassTransit(x =>
         {
             x.SetKebabCaseEndpointNameFormatter();
+
+            x.AddConsumer<CommentCreatedIntegrationEventConsumer>();
 
             x.AddEntityFrameworkOutbox<CommentsDbContext>(o =>
             {
