@@ -4,6 +4,7 @@ using SPAComments.CommentsModule.Application.Features.Commands.CreateComment;
 using SPAComments.CommentsModule.Application.Features.Commands.UploadCommentAttachment;
 using SPAComments.CommentsModule.Application.Features.Common;
 using SPAComments.CommentsModule.Application.Features.Common.Dtos;
+using SPAComments.CommentsModule.Application.Features.Queries.GetLatest;
 using SPAComments.CommentsModule.Application.Features.Queries.Search;
 using SPAComments.CommentsModule.Presentation.Comments.Requests;
 using SPAComments.Core.Abstractions;
@@ -55,6 +56,15 @@ public class CommentsController(IMapper mapper) : ApplicationController
     public async Task<EndpointResult<PagedResult<CommentSearchItemDto>>> Search(
         [FromQuery] CommentSearchQuery query,
         [FromServices] IQueryHandlerWithResult<PagedResult<CommentSearchItemDto>, CommentSearchQuery> handler,
+        CancellationToken cancellationToken)
+    {
+        return await handler.Handle(query, cancellationToken);
+    }
+
+    [HttpGet("latest")]
+    public async Task<EndpointResult<PagedResult<CommentDto>>> GetLatest(
+        [FromQuery] GetLatestCommentsQuery query,
+        [FromServices] IQueryHandlerWithResult<PagedResult<CommentDto>, GetLatestCommentsQuery> handler,
         CancellationToken cancellationToken)
     {
         return await handler.Handle(query, cancellationToken);
