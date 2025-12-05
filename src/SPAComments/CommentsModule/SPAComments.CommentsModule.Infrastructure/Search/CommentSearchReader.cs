@@ -49,7 +49,7 @@ public sealed class CommentSearchReader : ICommentSearchReader
 
         var searchResponse = await _client.SearchAsync<CommentSearchDocument>(
             s => s
-                .Index(_indexName)
+                .Indices(_indexName)
                 .From(from)
                 .Size(query.PageSize)
                 .Query(esQuery)
@@ -71,7 +71,6 @@ public sealed class CommentSearchReader : ICommentSearchReader
                     }
                 }),
             ct);
-
 
         if (!searchResponse.IsValidResponse)
         {

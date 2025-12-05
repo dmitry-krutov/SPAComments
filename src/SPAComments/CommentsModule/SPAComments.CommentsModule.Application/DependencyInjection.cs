@@ -1,3 +1,4 @@
+using FluentValidation;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SPAComments.CommentsModule.Application.Features.Commands.CreateComment;
@@ -13,6 +14,13 @@ public static class DependencyInjection
         this IServiceCollection services, IConfiguration configuration)
     {
         services.AddHandlers();
+
+        services.AddMediatR(cfg =>
+        {
+            cfg.RegisterServicesFromAssemblyContaining<CreateCommentCommandHandler>();
+        });
+
+        services.AddValidatorsFromAssemblyContaining<CreateCommentCommandValidator>();
 
         return services;
     }

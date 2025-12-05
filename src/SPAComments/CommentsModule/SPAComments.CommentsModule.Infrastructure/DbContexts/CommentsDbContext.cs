@@ -1,4 +1,5 @@
-using System.Linq;
+using MassTransit;
+using MassTransit.EntityFrameworkCoreIntegration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using SPAComments.CommentsModule.Domain;
@@ -16,6 +17,12 @@ public class CommentsDbContext : DbContext
 
     public IQueryable<Comment> CommentsQueryable => Comments.AsQueryable();
 
+    public DbSet<InboxState> InboxStates => Set<InboxState>();
+
+    public DbSet<OutboxState> OutboxStates => Set<OutboxState>();
+
+    public DbSet<OutboxMessage> OutboxMessages => Set<OutboxMessage>();
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseLoggerFactory(CreateLoggerFactory());
@@ -23,8 +30,13 @@ public class CommentsDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.HasDefaultSchema("issues");
+        base.OnModelCreating(modelBuilder);
+
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(CommentsDbContext).Assembly);
+
+        modelBuilder.AddInboxStateEntity();
+        modelBuilder.AddOutboxStateEntity();
+        modelBuilder.AddOutboxMessageEntity();
     }
 
     private ILoggerFactory CreateLoggerFactory() =>

@@ -10,7 +10,7 @@ public sealed class CommentConfiguration : IEntityTypeConfiguration<Comment>
 {
     public void Configure(EntityTypeBuilder<Comment> builder)
     {
-        builder.ToTable("comments", "comments");
+        builder.ToTable("comments");
 
         builder.HasKey(x => x.Id);
 
@@ -75,7 +75,7 @@ public sealed class CommentConfiguration : IEntityTypeConfiguration<Comment>
             x => x.Attachments,
             nav =>
             {
-                nav.ToTable("comment_attachments", "comments");
+                nav.ToTable("comment_attachments");
 
                 nav.WithOwner().HasForeignKey("comment_id");
 

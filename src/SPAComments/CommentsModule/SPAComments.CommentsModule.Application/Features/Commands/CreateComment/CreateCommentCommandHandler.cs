@@ -1,5 +1,6 @@
 using CSharpFunctionalExtensions;
 using FileService.Communication;
+using FluentValidation;
 using MediatR;
 using SPAComments.CaptchaModule.Application;
 using SPAComments.CaptchaModule.Application.Services;
@@ -9,6 +10,7 @@ using SPAComments.CommentsModule.Application.Interfaces;
 using SPAComments.CommentsModule.Domain;
 using SPAComments.CommentsModule.Domain.ValueObjects;
 using SPAComments.Core.Abstractions;
+using SPAComments.Core.Validation;
 using SPAComments.SharedKernel;
 using SPAComments.SharedKernel.ValueObjects.Ids;
 
@@ -23,6 +25,7 @@ public class CreateCommentCommandHandler : ICommandHandler<CommentDto, CreateCom
     private readonly IFileServiceClient _fileServiceClient;
     private readonly IPublisher _publisher;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IValidator<CreateCommentCommand> _validator;
 
     public CreateCommentCommandHandler(
         ICommentsRepository repository,
@@ -30,7 +33,8 @@ public class CreateCommentCommandHandler : ICommandHandler<CommentDto, CreateCom
         ICaptchaService captchaService,
         IFileServiceClient fileServiceClient,
         IPublisher publisher,
-        IUnitOfWork unitOfWork)
+        IUnitOfWork unitOfWork,
+        IValidator<CreateCommentCommand> validator)
     {
         _repository = repository;
         _dateTimeProvider = dateTimeProvider;
@@ -38,12 +42,17 @@ public class CreateCommentCommandHandler : ICommandHandler<CommentDto, CreateCom
         _fileServiceClient = fileServiceClient;
         _publisher = publisher;
         _unitOfWork = unitOfWork;
+        _validator = validator;
     }
 
     public async Task<Result<CommentDto, ErrorList>> Handle(
         CreateCommentCommand command,
         CancellationToken cancellationToken)
     {
+        var validationResult = await _validator.ValidateAsync(command, cancellationToken);
+        if (validationResult.IsValid == false)
+            return validationResult.ToList();
+
         var captchaIsValid =
             await _captchaService.ValidateAsync(command.CaptchaId, command.CaptchaAnswer, cancellationToken);
         if (captchaIsValid == false)

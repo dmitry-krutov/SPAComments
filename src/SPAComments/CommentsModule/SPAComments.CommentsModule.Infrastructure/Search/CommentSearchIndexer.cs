@@ -45,8 +45,7 @@ public sealed class CommentSearchIndexer : ICommentSearchIndexer
             _logger.LogError(
                 "Failed to index comment {CommentId}. Details: {Details}",
                 doc.Id,
-                response.DebugInformation
-            );
+                response.DebugInformation);
         }
     }
 }
