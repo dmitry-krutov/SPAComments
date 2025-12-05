@@ -12,7 +12,9 @@ public static class CaptchaEndpoints
     public static IEndpointRouteBuilder MapCaptchaEndpoints(
         this IEndpointRouteBuilder endpoints)
     {
-        var group = endpoints.MapGroup("/api/captcha");
+        var group = endpoints
+            .MapGroup("/api/captcha")
+            .WithTags("Captcha");
 
         group.MapGet(string.Empty, async (
             ICaptchaService captchaService,

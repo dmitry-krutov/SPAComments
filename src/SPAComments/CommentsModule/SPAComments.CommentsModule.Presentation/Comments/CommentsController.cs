@@ -52,17 +52,17 @@ public class CommentsController(IMapper mapper) : ApplicationController
         return await handler.Handle(command, cancellationToken);
     }
 
-    [HttpGet("search")]
+    [HttpPost("search")]
     public async Task<EndpointResult<PagedResult<CommentSearchItemDto>>> Search(
-        [FromQuery] CommentSearchQuery query,
+        [FromBody] CommentSearchQuery query,
         [FromServices] IQueryHandlerWithResult<PagedResult<CommentSearchItemDto>, CommentSearchQuery> handler,
         CancellationToken cancellationToken)
     {
         return await handler.Handle(query, cancellationToken);
     }
 
-    [HttpGet("latest")]
-    public async Task<EndpointResult<PagedResult<CommentDto>>> GetLatest(
+    [HttpGet]
+    public async Task<EndpointResult<PagedResult<CommentDto>>> GetWithPagination(
         [FromQuery] GetLatestCommentsQuery query,
         [FromServices] IQueryHandlerWithResult<PagedResult<CommentDto>, GetLatestCommentsQuery> handler,
         CancellationToken cancellationToken)
