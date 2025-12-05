@@ -1,48 +1,48 @@
 services:
-  spa-comments:
-    container_name: spa-comments
-    build:
-      context: .
-      dockerfile: src/SPAComments/SPAComments.Web/Dockerfile
-    restart: always
-    environment:
-      ASPNETCORE_ENVIRONMENT: Docker
-      ASPNETCORE_URLS: http://+:8080
-      ConnectionStrings__CommentsDb: Host=postgres;Port=5432;Database=app_db;Username=postgres;Password=postgres
-      ConnectionStrings__Redis: redis:6379
-      ConnectionStrings__RabbitMq: amqp://guest:guest@rabbitmq:5672
-      FileService__BaseAddress: http://file-service:8081
-      Elasticsearch__Url: http://elasticsearch:9200
-      Elasticsearch__CommentsIndex: spa-comments-comments
-    ports:
-      - "8080:8080"
-    depends_on:
-      - postgres
-      - redis
-      - rabbitmq
-      - elasticsearch
-      - file-service
+#  spa-comments:
+#    container_name: spa-comments
+#    build:
+#      context: .
+#      dockerfile: src/SPAComments/SPAComments.Web/Dockerfile
+#    restart: always
+#    environment:
+#      ASPNETCORE_ENVIRONMENT: Docker
+#      ASPNETCORE_URLS: http://+:8080
+#      ConnectionStrings__CommentsDb: Host=postgres;Port=5432;Database=app_db;Username=postgres;Password=postgres
+#      ConnectionStrings__Redis: redis:6379
+#      ConnectionStrings__RabbitMq: amqp://guest:guest@rabbitmq:5672
+#      FileService__BaseAddress: http://file-service:8081
+#      Elasticsearch__Url: http://elasticsearch:9200
+#      Elasticsearch__CommentsIndex: spa-comments-comments
+#    ports:
+#      - "8080:8080"
+#    depends_on:
+#      - postgres
+#      - redis
+#      - rabbitmq
+#      - elasticsearch
+#      - file-service
 
-  file-service:
-    container_name: file-service
-    build:
-      context: ./src/SPAComments.FileService
-      dockerfile: Dockerfile
-    restart: always
-    environment:
-      ASPNETCORE_ENVIRONMENT: Docker
-      ASPNETCORE_URLS: http://+:8081
-      ConnectionStrings__Mongo: mongodb://mongo:27017
-      Minio__Bucket: spa-comments
-      Minio__Endpoint: http://minio:9000
-      Minio__AccessKey: minioadmin
-      Minio__SecretKey: minioadmin
-      Minio__WithSsl: "false"
-    ports:
-      - "8081:8081"
-    depends_on:
-      - mongo
-      - minio
+#  file-service:
+#    container_name: file-service
+#    build:
+#      context: ./src/SPAComments.FileService
+#      dockerfile: Dockerfile
+#    restart: always
+#    environment:
+#      ASPNETCORE_ENVIRONMENT: Docker
+#      ASPNETCORE_URLS: http://+:8081
+#      ConnectionStrings__Mongo: mongodb://mongo:27017
+#      Minio__Bucket: spa-comments
+#      Minio__Endpoint: http://minio:9000
+#      Minio__AccessKey: minioadmin
+#      Minio__SecretKey: minioadmin
+#      Minio__WithSsl: "false"
+#    ports:
+#      - "8081:8081"
+#    depends_on:
+#      - mongo
+#      - minio
 
   postgres:
     container_name: postgres
@@ -54,7 +54,7 @@ services:
     ports:
       - "5431:5432"
     volumes:
-      - postgres-data:/var/lib/postgresql/data
+      - postgres-data:/var/lib/postgresql
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
 
   redis:
@@ -89,7 +89,7 @@ services:
 
   elasticsearch:
     container_name: elasticsearch
-    image: docker.elastic.co/elasticsearch/elasticsearch:8.13.4
+    image: docker.elastic.co/elasticsearch/elasticsearch:9.2.2
     restart: always
     environment:
       - discovery.type=single-node
