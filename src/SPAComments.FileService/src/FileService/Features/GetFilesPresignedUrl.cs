@@ -54,7 +54,10 @@ public static class GetFilesPresignedUrl
                 {
                     var presignedRequest = new GetPreSignedUrlRequest
                     {
-                        BucketName = bucket, Key = file.StoragePath, Expires = expiresAtUtc
+                        BucketName = bucket,
+                        Key = file.StoragePath,
+                        Expires = expiresAtUtc,
+                        Protocol = Protocol.HTTP
                     };
 
                     var url = s3Client.GetPreSignedURL(presignedRequest);

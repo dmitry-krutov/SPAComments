@@ -26,6 +26,7 @@ public static class UploadFile
         public void MapEndpoint(IEndpointRouteBuilder app)
         {
             app.MapPost("files", Handler)
+                .DisableAntiforgery()
                 .Accepts<IFormFile>("multipart/form-data")
                 .Produces<UploadFileResponse>(StatusCodes.Status201Created)
                 .Produces(StatusCodes.Status400BadRequest);
