@@ -30,6 +30,13 @@ export interface CommentDto {
   attachments: CommentAttachmentDto[]
 }
 
+export interface PagedResult<T> {
+  items: T[]
+  totalCount: number
+  page: number
+  pageSize: number
+}
+
 export interface CreateCommentRequest {
   parentId: string | null
   userName: string

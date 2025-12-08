@@ -3,6 +3,7 @@ import type {
   CaptchaResponse,
   CommentDto,
   CreateCommentRequest,
+  PagedResult,
   UploadCommentAttachmentResult,
 } from './types'
 
@@ -22,3 +23,11 @@ export const createComment = (payload: CreateCommentRequest) =>
     },
     body: JSON.stringify(payload),
   })
+
+interface LatestCommentsParams {
+  page: number
+  pageSize: number
+}
+
+export const getLatestComments = ({ page, pageSize }: LatestCommentsParams) =>
+  apiFetch<PagedResult<CommentDto>>(`/api/Comments?page=${page}&pageSize=${pageSize}`)
