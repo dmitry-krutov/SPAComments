@@ -56,10 +56,23 @@ public sealed class FileServiceClient : IFileServiceClient
             return FailHttp("file-service.upload", response.StatusCode);
 
         var bodyStream = await response.Content.ReadAsStreamAsync(cancellationToken);
-        var uploadResponse = await JsonSerializer.DeserializeAsync<UploadFileResponse>(
+
+        var envelope = await JsonSerializer.DeserializeAsync<Envelope<UploadFileResponse>>(
             bodyStream,
             _jsonOptions,
             cancellationToken);
+
+        if (envelope is null)
+            return Error.Internal("file-service.upload.parse", "Failed to parse upload response envelope");
+
+        if (envelope.IsError)
+        {
+            var err = envelope.Errors?.FirstOrDefault()
+                      ?? Error.Failure("file-service.upload.failed", "File service returned failure");
+            return err;
+        }
+
+        var uploadResponse = envelope.Result;
 
         if (uploadResponse is null || uploadResponse.File is null)
             return Error.Internal("file-service.upload.parse", "Failed to parse upload response");
@@ -88,15 +101,28 @@ public sealed class FileServiceClient : IFileServiceClient
             return FailHttp("file-service.presigned", response.StatusCode);
 
         var bodyStream = await response.Content.ReadAsStreamAsync(cancellationToken);
-        var presignedResponse = await JsonSerializer.DeserializeAsync<GetFilesPresignedUrlResponse>(
+
+        var envelope = await JsonSerializer.DeserializeAsync<Envelope<GetFilesPresignedUrlResponse>>(
             bodyStream,
             _jsonOptions,
             cancellationToken);
 
+        if (envelope is null)
+            return Error.Internal("file-service.presigned.parse", "Failed to parse presigned urls response envelope");
+
+        if (envelope.IsError)
+        {
+            var err = envelope.Errors?.FirstOrDefault()
+                      ?? Error.Failure("file-service.presigned.failed", "File service returned failure");
+            return err;
+        }
+
+        var presignedResponse = envelope.Result;
+
         if (presignedResponse is null)
             return Error.Internal("file-service.presigned.parse", "Failed to parse presigned urls response");
 
-        var files = presignedResponse.Files.ToArray();
+        var files = presignedResponse.Files?.ToArray() ?? Array.Empty<FilePresignedUrlDto>();
         return Result.Success<IReadOnlyCollection<FilePresignedUrlDto>, Error>(files);
     }
 

@@ -10,6 +10,17 @@ using SPAComments.Framework.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy
+            .AllowAnyOrigin()
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
+
 builder.Services
     .AddCommentsModuleInfrastructure(builder.Configuration)
     .AddCommentsModuleApplication(builder.Configuration)
@@ -46,8 +57,16 @@ if (!app.Environment.IsEnvironment("Docker"))
     app.UseHttpsRedirection();
 }
 
+app.UseCors("AllowAll");
+
 app.MapControllers();
 app.MapCaptchaEndpoints();
 app.MapHub<CommentsHub>("/hubs/comments");
+
+app.UseCors(policy =>
+    policy.AllowAnyOrigin()
+        .AllowAnyHeader()
+        .AllowAnyMethod()
+);
 
 app.Run();

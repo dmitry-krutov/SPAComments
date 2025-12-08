@@ -11,7 +11,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="SPAComments.Framework" Version="1.0.0" />
+      <PackageReference Include="SPAComments.Framework" Version="1.0.1" />
     </ItemGroup>
 
 </Project>
