@@ -1,6 +1,5 @@
 import { type JSX, ChangeEvent, FormEvent, useEffect, useMemo, useState } from 'react'
 import { useAppDispatch, useAppSelector } from './app/hooks'
-import { config } from './config'
 import { fetchLatestComments } from './features/comments/commentFeedSlice'
 import { fetchCaptcha, submitComment, uploadAttachment } from './features/comments/commentFormSlice'
 import type { CommentDto } from './features/comments/types'
@@ -175,9 +174,6 @@ function App() {
               <p className="text-sm uppercase tracking-[0.28em] text-slate-300">SPA Comments</p>
               <h1 className="text-3xl font-semibold text-white">Комментарии</h1>
             </div>
-            <div className="rounded-full bg-brand-500/10 px-4 py-2 text-sm text-brand-100">
-              API: <span className="font-semibold text-brand-200">{config.apiBaseUrl}</span>
-            </div>
           </div>
         </header>
 
@@ -205,7 +201,7 @@ function App() {
               <div className="mt-8 grid gap-6 md:grid-cols-2">
                 <div className="space-y-2">
                   <label className="text-sm text-slate-200" htmlFor="userName">
-                    Имя*
+                    Username*
                   </label>
                   <input
                     id="userName"
@@ -213,7 +209,7 @@ function App() {
                     value={form.userName}
                     onChange={handleInput('userName')}
                     className="w-full rounded-xl border border-white/10 bg-white/10 px-4 py-3 text-white outline-none transition focus:border-brand-400 focus:ring-2 focus:ring-brand-400/40"
-                    placeholder="Как вас зовут?"
+                    placeholder="username"
                   />
                 </div>
                 <div className="space-y-2">
@@ -326,7 +322,6 @@ function App() {
           <aside className="space-y-4">
             <div className="rounded-2xl border border-white/10 bg-slate-950/40 p-6 shadow-soft">
               <h3 className="text-lg font-semibold text-white">Загруженные вложения</h3>
-              <p className="text-sm text-slate-400">Файлы отправляются через /api/Comments/attachments</p>
               <div className="mt-4 space-y-3">
                 {attachments.length === 0 && <p className="text-sm text-slate-400">Пока ничего не выбрано.</p>}
                 {attachments.map((file) => (
@@ -369,7 +364,6 @@ function App() {
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
               <h2 className="text-2xl font-semibold text-white">Лента комментариев</h2>
-              <p className="text-sm text-slate-300">Дерево сообщений с пагинацией по API /api/Comments.</p>
             </div>
             <div className="flex items-center gap-2">
               <button
