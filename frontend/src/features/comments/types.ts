@@ -17,6 +17,7 @@ export interface CommentAttachmentDto {
   fileId: string
   url: string
   expiresAtUtc: string
+  contentType?: string
 }
 
 export interface CommentDto {

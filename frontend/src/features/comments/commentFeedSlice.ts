@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice, type PayloadAction } from '@reduxjs/toolkit'
 import { RootState } from '../../app/store'
 import { ApiErrorResponse } from '../../lib/apiClient'
 import { getLatestComments } from './api'
@@ -51,7 +51,15 @@ export const fetchLatestComments = createAsyncThunk<
 const commentFeedSlice = createSlice({
   name: 'commentFeed',
   initialState,
-  reducers: {},
+  reducers: {
+    prependComment(state, action: PayloadAction<CommentDto>) {
+      const exists = state.items.some((item) => item.id === action.payload.id)
+      if (exists) return
+
+      state.items.unshift(action.payload)
+      state.totalCount += 1
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchLatestComments.pending, (state, action) => {
@@ -74,4 +82,5 @@ const commentFeedSlice = createSlice({
   },
 })
 
+export const { prependComment } = commentFeedSlice.actions
 export default commentFeedSlice.reducer
