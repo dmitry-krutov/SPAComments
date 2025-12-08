@@ -11,8 +11,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="FileService.Contracts" Version="1.0.0" />
-      <PackageReference Include="spacomments.framework" Version="1.0.0" />
+      <PackageReference Include="FileService.Contracts" Version="1.0.1" />
+      <PackageReference Include="spacomments.framework" Version="1.0.1" />
     </ItemGroup>
 
 </Project>
