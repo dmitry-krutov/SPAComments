@@ -1,5 +1,6 @@
 using CSharpFunctionalExtensions;
 using SPAComments.CommentsModule.Application.Features.Common;
+using SPAComments.CommentsModule.Application.Features.Queries.GetById;
 using SPAComments.CommentsModule.Application.Features.Queries.GetLatest;
 using SPAComments.CommentsModule.Domain;
 using SPAComments.SharedKernel;
@@ -12,5 +13,9 @@ public interface ICommentsRepository
 
     Task<PagedResult<LatestCommentReadModel>> ReadLatestAsync(
         GetLatestCommentsQuery query,
+        CancellationToken cancellationToken);
+
+    Task<Result<CommentReadModel, Error>> ReadByIdAsync(
+        Guid id,
         CancellationToken cancellationToken);
 }

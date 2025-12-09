@@ -1,9 +1,11 @@
+using System;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using SPAComments.CommentsModule.Application.Features.Commands.CreateComment;
 using SPAComments.CommentsModule.Application.Features.Commands.UploadCommentAttachment;
 using SPAComments.CommentsModule.Application.Features.Common;
 using SPAComments.CommentsModule.Application.Features.Common.Dtos;
+using SPAComments.CommentsModule.Application.Features.Queries.GetById;
 using SPAComments.CommentsModule.Application.Features.Queries.GetLatest;
 using SPAComments.CommentsModule.Application.Features.Queries.Search;
 using SPAComments.CommentsModule.Presentation.Comments.Requests;
@@ -67,6 +69,16 @@ public class CommentsController(IMapper mapper) : ApplicationController
         [FromServices] IQueryHandlerWithResult<PagedResult<CommentDto>, GetLatestCommentsQuery> handler,
         CancellationToken cancellationToken)
     {
+        return await handler.Handle(query, cancellationToken);
+    }
+
+    [HttpGet("{id:guid}")]
+    public async Task<EndpointResult<CommentDto>> GetById(
+        Guid id,
+        [FromServices] IQueryHandlerWithResult<CommentDto, GetCommentByIdQuery> handler,
+        CancellationToken cancellationToken)
+    {
+        var query = new GetCommentByIdQuery { Id = id };
         return await handler.Handle(query, cancellationToken);
     }
 }
