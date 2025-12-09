@@ -2,6 +2,7 @@ import { apiFetch, apiFetchForm } from '../../lib/apiClient'
 import type {
   CaptchaResponse,
   CommentDto,
+  CommentSearchItemDto,
   CreateCommentRequest,
   PagedResult,
   UploadCommentAttachmentResult,
@@ -31,3 +32,20 @@ interface LatestCommentsParams {
 
 export const getLatestComments = ({ page, pageSize }: LatestCommentsParams) =>
   apiFetch<PagedResult<CommentDto>>(`/api/Comments?page=${page}&pageSize=${pageSize}`)
+
+interface SearchCommentsParams {
+  text: string
+  page?: number
+  pageSize?: number
+}
+
+export const searchComments = ({ text, page = 1, pageSize = 10 }: SearchCommentsParams) =>
+  apiFetch<PagedResult<CommentSearchItemDto>>('/api/Comments/search', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ text, page, pageSize }),
+  })
+
+export const getCommentById = (id: string) => apiFetch<CommentDto>(`/api/Comments/${id}`)

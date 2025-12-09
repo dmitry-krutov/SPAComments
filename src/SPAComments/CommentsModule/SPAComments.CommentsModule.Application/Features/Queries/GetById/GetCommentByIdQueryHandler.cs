@@ -8,6 +8,7 @@ using SPAComments.CommentsModule.Application.Features.Common.Dtos;
 using SPAComments.CommentsModule.Application.Interfaces;
 using SPAComments.Core.Abstractions;
 using SPAComments.SharedKernel;
+using SPAComments.SharedKernel.ValueObjects.Ids;
 
 namespace SPAComments.CommentsModule.Application.Features.Queries.GetById;
 
@@ -31,7 +32,7 @@ public sealed class GetCommentByIdQueryHandler
         GetCommentByIdQuery query,
         CancellationToken cancellationToken)
     {
-        var readResult = await _repository.ReadByIdAsync(query.Id, cancellationToken);
+        var readResult = await _repository.ReadByIdAsync(CommentId.Create(query.Id), cancellationToken);
         if (readResult.IsFailure)
             return readResult.Error.ToErrorList();
 

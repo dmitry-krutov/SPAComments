@@ -4,6 +4,7 @@ using SPAComments.CommentsModule.Application.Features.Queries.GetById;
 using SPAComments.CommentsModule.Application.Features.Queries.GetLatest;
 using SPAComments.CommentsModule.Domain;
 using SPAComments.SharedKernel;
+using SPAComments.SharedKernel.ValueObjects.Ids;
 
 namespace SPAComments.CommentsModule.Application.Interfaces;
 
@@ -16,6 +17,6 @@ public interface ICommentsRepository
         CancellationToken cancellationToken);
 
     Task<Result<CommentReadModel, Error>> ReadByIdAsync(
-        Guid id,
+        CommentId id,
         CancellationToken cancellationToken);
 }
