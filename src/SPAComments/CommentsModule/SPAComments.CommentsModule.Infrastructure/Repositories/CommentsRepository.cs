@@ -1,7 +1,9 @@
+using System;
 using System.Linq;
 using CSharpFunctionalExtensions;
 using Microsoft.EntityFrameworkCore;
 using SPAComments.CommentsModule.Application.Features.Common;
+using SPAComments.CommentsModule.Application.Features.Queries.GetById;
 using SPAComments.CommentsModule.Application.Features.Queries.GetLatest;
 using SPAComments.CommentsModule.Application.Interfaces;
 using SPAComments.CommentsModule.Domain;
@@ -62,5 +64,36 @@ public class CommentsRepository : ICommentsRepository
             Page = query.Page,
             PageSize = query.PageSize
         };
+    }
+
+    public async Task<Result<CommentReadModel, Error>> ReadByIdAsync(
+        Guid id,
+        CancellationToken cancellationToken)
+    {
+        var comment = await _context.CommentsQueryable
+            .AsNoTracking()
+            .Where(c => c.Id.Value == id)
+            .Select(c => new CommentReadModel
+            {
+                Id = c.Id.Value,
+                ParentId = c.ParentCommentId != null ? c.ParentCommentId.Value : null,
+                UserName = c.UserName.Value,
+                Email = c.Email.Value,
+                HomePage = c.HomePage != null ? c.HomePage.Value : null,
+                Text = c.Text.Value,
+                CreatedAt = c.CreatedAt,
+                AttachmentFileIds = c.Attachments.Select(a => a.FileId).ToArray()
+            })
+            .FirstOrDefaultAsync(cancellationToken);
+
+        if (comment is null)
+        {
+            var error = Error.NotFound(
+                "comments.get-by-id.not-found",
+                "Comment not found");
+            return Result.Failure<CommentReadModel, Error>(error);
+        }
+
+        return comment;
     }
 }
