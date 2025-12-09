@@ -17,6 +17,7 @@ export interface CommentAttachmentDto {
   fileId: string
   url: string
   expiresAtUtc: string
+  contentType?: string
 }
 
 export interface CommentDto {
@@ -28,6 +29,13 @@ export interface CommentDto {
   text: string
   createdAt: string
   attachments: CommentAttachmentDto[]
+}
+
+export interface PagedResult<T> {
+  items: T[]
+  totalCount: number
+  page: number
+  pageSize: number
 }
 
 export interface CreateCommentRequest {
