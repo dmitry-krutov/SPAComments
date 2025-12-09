@@ -20,6 +20,13 @@ export interface CommentAttachmentDto {
   contentType?: string
 }
 
+export interface CommentSearchItemDto {
+  id: string
+  userName: string
+  text: string
+  createdAt: string
+}
+
 export interface CommentDto {
   id: string
   parentId?: string | null
