@@ -22,7 +22,10 @@ public class CommentId : ComparableValueObject
         if (!id.HasValue)
             return GeneralErrors.Validation.ValueIsRequired(nameof(CommentId));
 
-        return TryCreate(id.Value);
+        if (id.Value == Guid.Empty)
+            return GeneralErrors.Validation.ValueIsRequired(nameof(CommentId));
+
+        return Result.Success<CommentId, Error>(Create(id.Value));
     }
 
     protected override IEnumerable<IComparable> GetComparableEqualityComponents()
