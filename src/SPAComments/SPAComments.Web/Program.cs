@@ -21,6 +21,18 @@ builder.Services.AddCors(options =>
     });
 });
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("SignalRPolicy", policy =>
+    {
+        policy
+            .SetIsOriginAllowed(_ => true)
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
+    });
+});
+
 builder.Services
     .AddCommentsModuleInfrastructure(builder.Configuration)
     .AddCommentsModuleApplication(builder.Configuration)
@@ -61,7 +73,8 @@ app.UseCors("AllowAll");
 
 app.MapControllers();
 app.MapCaptchaEndpoints();
-app.MapHub<CommentsHub>("/hubs/comments");
+app.MapHub<CommentsHub>("/hubs/comments").RequireCors("SignalRPolicy");
+;
 
 app.UseCors(policy =>
     policy.AllowAnyOrigin()
