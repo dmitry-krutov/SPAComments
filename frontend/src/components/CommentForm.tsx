@@ -186,7 +186,6 @@ export function CommentForm({ parentId = null, onSubmitted, onCancel, heading, c
       setCaptchaVisible(false)
       setCaptcha({ status: 'idle' })
       onSubmitted(merged)
-      if (onCancel) onCancel()
     } catch (error) {
       setSubmitStatus('failed')
       setSubmitError(stringifyError(error))
