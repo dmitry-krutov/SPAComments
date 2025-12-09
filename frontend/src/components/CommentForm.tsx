@@ -205,14 +205,6 @@ export function CommentForm({ parentId = null, onSubmitted, onCancel, heading, c
           {heading && <h2 className="text-xl font-semibold text-white">{heading}</h2>}
           <p className="text-sm text-slate-300">Поля, отмеченные звёздочкой, обязательны.</p>
         </div>
-        <button
-          type="button"
-          onClick={refreshCaptcha}
-          className="group inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/20"
-        >
-          <span className="h-2 w-2 rounded-full bg-emerald-400 group-hover:scale-110" />
-          Обновить капчу
-        </button>
       </div>
 
       <div className="mt-6 grid gap-4 md:grid-cols-2">
@@ -326,12 +318,22 @@ export function CommentForm({ parentId = null, onSubmitted, onCancel, heading, c
       {captchaVisible && (
         <div className="mt-6 grid gap-4 md:grid-cols-[auto,1fr] md:items-center">
           <div className="flex items-center gap-3">
-            <div className="flex h-24 w-32 items-center justify-center rounded-xl border border-white/10 bg-slate-950/40">
-              {captcha.status === 'loading' && <div className="text-sm text-slate-300">Загрузка...</div>}
-              {captcha.status === 'failed' && <div className="text-sm text-rose-300">Не удалось загрузить капчу</div>}
-              {captcha.status === 'succeeded' && (
-                <img src={captchaImageSrc} alt="Капча" className="h-full w-full rounded-md object-contain" />
-              )}
+            <div className="flex flex-col items-center gap-2">
+              <div className="flex h-24 w-32 items-center justify-center rounded-xl border border-white/10 bg-slate-950/40">
+                {captcha.status === 'loading' && <div className="text-sm text-slate-300">Загрузка...</div>}
+                {captcha.status === 'failed' && <div className="text-sm text-rose-300">Не удалось загрузить капчу</div>}
+                {captcha.status === 'succeeded' && (
+                  <img src={captchaImageSrc} alt="Капча" className="h-full w-full rounded-md object-contain" />
+                )}
+              </div>
+              <button
+                type="button"
+                onClick={refreshCaptcha}
+                className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-2 text-xs font-medium text-white transition hover:border-brand-400/50 hover:text-white"
+              >
+                <span className="text-emerald-300">↻</span>
+                Обновить капчу
+              </button>
             </div>
             <div className="space-y-2">
               <label className="text-sm text-slate-200" htmlFor={`${parentId || 'root'}-captchaAnswer`}>
