@@ -41,7 +41,9 @@ function App() {
   const dispatch = useAppDispatch()
   const commentFeed = useAppSelector((state) => state.commentFeed)
   const [replyTarget, setReplyTarget] = useState<{ id: string; userName: string; text: string } | null>(null)
+  const [replyOrigin, setReplyOrigin] = useState<{ commentId: string; top: number } | null>(null)
   const formRef = useRef<HTMLDivElement | null>(null)
+  const commentRefs = useRef<Record<string, HTMLDivElement | null>>({})
 
   useEffect(() => {
     dispatch(fetchLatestComments())
@@ -54,11 +56,16 @@ function App() {
     if (page < 1 || page > totalPages) return
     dispatch(fetchLatestComments({ page }))
     setReplyTarget(null)
+    setReplyOrigin(null)
   }
 
   const handleCommentAdded = (comment: CommentDto) => {
     dispatch(prependComment(comment))
+    if (replyOrigin && comment.parentId === replyOrigin.commentId) {
+      scrollBackToOrigin()
+    }
     setReplyTarget(null)
+    setReplyOrigin(null)
   }
 
   const scrollToForm = () => {
@@ -67,12 +74,35 @@ function App() {
     }
   }
 
+  const registerCommentRef = (id: string, el: HTMLDivElement | null) => {
+    if (el) {
+      commentRefs.current[id] = el
+    } else {
+      delete commentRefs.current[id]
+    }
+  }
+
+  const getCommentTop = (id: string) => {
+    const element = commentRefs.current[id]
+    if (!element) return null
+    const rect = element.getBoundingClientRect()
+    return rect.top + window.scrollY
+  }
+
+  const scrollBackToOrigin = () => {
+    if (!replyOrigin) return
+    window.scrollTo({ top: replyOrigin.top, behavior: 'smooth' })
+  }
+
   const renderComment = (node: CommentNode, depth = 0): JSX.Element => (
     <CommentNode
       key={node.id}
       node={node}
       depth={depth}
+      registerRef={registerCommentRef}
       onReply={(target) => {
+        const top = getCommentTop(node.id) ?? window.scrollY
+        setReplyOrigin({ commentId: node.id, top })
         setReplyTarget(target)
         scrollToForm()
       }}
@@ -113,7 +143,15 @@ function App() {
               heading="Новый комментарий"
               parentId={replyTarget?.id ?? null}
               onSubmitted={handleCommentAdded}
-              onCancel={replyTarget ? () => setReplyTarget(null) : undefined}
+              onCancel={
+                replyTarget
+                  ? () => {
+                      scrollBackToOrigin()
+                      setReplyTarget(null)
+                      setReplyOrigin(null)
+                    }
+                  : undefined
+              }
             />
           </div>
 
@@ -178,6 +216,7 @@ function App() {
 interface CommentNodeProps {
   node: CommentNode
   depth: number
+  registerRef: (id: string, el: HTMLDivElement | null) => void
   onReply: (target: { id: string; userName: string; text: string }) => void
 }
 
@@ -187,21 +226,26 @@ const getAttachmentInfo = (contentType?: string) => {
   return { icon: '📁', label: 'Файл' }
 }
 
-const CommentNode = ({ node, depth, onReply }: CommentNodeProps) => {
-  const [expanded, setExpanded] = useState(true)
+const declension = (count: number) => {
+  const mod10 = count % 10
+  const mod100 = count % 100
+
+  if (mod10 === 1 && mod100 !== 11) return 'ответ'
+  if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) return 'ответа'
+  return 'ответов'
+}
+
+const countDescendants = (node: CommentNode): number =>
+  node.children.reduce((acc, child) => acc + 1 + countDescendants(child), 0)
+
+const CommentNode = ({ node, depth, registerRef, onReply }: CommentNodeProps) => {
+  const [expanded, setExpanded] = useState(false)
   const shortText = node.text.trim()
+  const totalReplies = useMemo(() => countDescendants(node), [node])
 
   return (
-    <div className="space-y-3" style={{ marginLeft: depth * 18 }}>
+    <div ref={(el) => registerRef(node.id, el)} className="space-y-3" style={{ marginLeft: depth * 18 }}>
       <div className="flex flex-wrap items-start gap-3">
-        <button
-          type="button"
-          onClick={() => setExpanded((prev) => !prev)}
-          className="mt-1 flex h-9 w-9 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-sm text-white transition hover:border-brand-400/50 hover:text-white"
-          aria-label={expanded ? 'Свернуть ветку' : 'Развернуть ветку'}
-        >
-          {expanded ? '▼' : '►'}
-        </button>
         <div className="flex items-start gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-sm font-semibold text-white">
             {node.userName.charAt(0).toUpperCase()}
@@ -255,10 +299,22 @@ const CommentNode = ({ node, depth, onReply }: CommentNodeProps) => {
         </button>
       </div>
 
+      {totalReplies > 0 && (
+        <button
+          type="button"
+          onClick={() => setExpanded((prev) => !prev)}
+          className="inline-flex items-center gap-2 rounded-full border border-white/5 bg-white/0 px-2 py-1 text-xs font-medium text-slate-200 transition hover:border-white/15 hover:bg-white/5 hover:text-white"
+          aria-label={expanded ? 'Свернуть ветку' : 'Развернуть ветку'}
+        >
+          <span className="text-[10px] text-slate-400">{expanded ? '▼' : '►'}</span>
+          <span>({totalReplies} {declension(totalReplies)})</span>
+        </button>
+      )}
+
       {expanded && node.children.length > 0 && (
         <div className="space-y-3 border-l border-white/10 pl-4">
           {node.children.map((child) => (
-            <CommentNode key={child.id} node={child} depth={depth + 1} onReply={onReply} />
+            <CommentNode key={child.id} node={child} depth={depth + 1} registerRef={registerRef} onReply={onReply} />
           ))}
         </div>
       )}
