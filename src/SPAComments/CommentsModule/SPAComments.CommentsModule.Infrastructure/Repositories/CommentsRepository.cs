@@ -9,6 +9,7 @@ using SPAComments.CommentsModule.Application.Interfaces;
 using SPAComments.CommentsModule.Domain;
 using SPAComments.CommentsModule.Infrastructure.DbContexts;
 using SPAComments.SharedKernel;
+using SPAComments.SharedKernel.ValueObjects.Ids;
 
 namespace SPAComments.CommentsModule.Infrastructure.Repositories;
 
@@ -67,12 +68,12 @@ public class CommentsRepository : ICommentsRepository
     }
 
     public async Task<Result<CommentReadModel, Error>> ReadByIdAsync(
-        Guid id,
+        CommentId id,
         CancellationToken cancellationToken)
     {
         var comment = await _context.CommentsQueryable
             .AsNoTracking()
-            .Where(c => c.Id.Value == id)
+            .Where(c => c.Id == id)
             .Select(c => new CommentReadModel
             {
                 Id = c.Id.Value,
