@@ -1,8 +1,10 @@
+import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr'
 import { type JSX, useEffect, useMemo, useRef, useState } from 'react'
 import { useAppDispatch, useAppSelector } from './app/hooks'
 import { prependComment, fetchLatestComments } from './features/comments/commentFeedSlice'
 import type { CommentDto } from './features/comments/types'
 import CommentForm from './components/CommentForm'
+import { config } from './config'
 
 const formatDate = (value: string) =>
   new Intl.DateTimeFormat('ru-RU', {
@@ -49,6 +51,29 @@ function App() {
 
   useEffect(() => {
     dispatch(fetchLatestComments())
+  }, [dispatch])
+
+  useEffect(() => {
+    const connection = new HubConnectionBuilder()
+      .withUrl(`${config.apiBaseUrl}/hubs/comments`)
+      .withAutomaticReconnect()
+      .configureLogging(LogLevel.Error)
+      .build()
+
+    const handleCommentCreated = (comment: CommentDto) => {
+      dispatch(prependComment(comment))
+    }
+
+    connection.on('CommentCreated', handleCommentCreated)
+
+    connection.start().catch((error) => {
+      console.error('Не удалось подключиться к обновлениям комментариев', error)
+    })
+
+    return () => {
+      connection.off('CommentCreated', handleCommentCreated)
+      connection.stop().catch(() => {})
+    }
   }, [dispatch])
 
   const commentTree = useMemo(() => buildCommentTree(commentFeed.items), [commentFeed.items])
