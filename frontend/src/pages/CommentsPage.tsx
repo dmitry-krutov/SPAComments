@@ -254,25 +254,25 @@ function CommentsPage() {
         </div>
 
         <div className="rounded-2xl border border-white/10 bg-slate-950/40 p-4">
-          <form onSubmit={handleSearchSubmit} className="flex flex-col gap-3 md:flex-row md:items-center md:gap-4">
-            <div className="flex-1 space-y-1">
-              <label htmlFor="comment-search" className="text-sm text-slate-200">
-                Поиск комментариев по тексту
-              </label>
+          <form onSubmit={handleSearchSubmit} className="space-y-2">
+            <label htmlFor="comment-search" className="text-sm text-slate-200">
+              Поиск комментариев по тексту
+            </label>
+            <div className="flex flex-col gap-3 md:flex-row md:items-center md:gap-4">
               <input
                 id="comment-search"
                 value={searchText}
                 onChange={(event) => setSearchText(event.target.value)}
-                className="w-full rounded-xl border border-white/10 bg-white/10 px-4 py-3 text-white outline-none transition focus:border-brand-400 focus:ring-2 focus:ring-brand-400/40"
+                className="w-full flex-1 rounded-xl border border-white/10 bg-white/10 px-4 py-3 text-white outline-none transition focus:border-brand-400 focus:ring-2 focus:ring-brand-400/40"
                 placeholder="Введите текст для поиска"
               />
+              <button
+                type="submit"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-brand-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-brand-500/30 transition hover:bg-brand-600"
+              >
+                Найти
+              </button>
             </div>
-            <button
-              type="submit"
-              className="inline-flex items-center justify-center gap-2 rounded-full bg-brand-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-brand-500/30 transition hover:bg-brand-600"
-            >
-              Найти
-            </button>
           </form>
         </div>
 

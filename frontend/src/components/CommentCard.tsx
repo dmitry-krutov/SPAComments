@@ -28,7 +28,17 @@ export function CommentCard({
   const shortText = comment.text.trim()
 
   return (
-    <div ref={registerRef} className="space-y-3">
+    <div ref={registerRef} className="relative space-y-3 pr-8">
+      {showPermalink && permalinkTo && (
+        <Link
+          to={permalinkTo}
+          className="absolute right-0 top-0 text-lg text-slate-300 transition hover:text-white"
+          aria-label="Открыть комментарий"
+        >
+          ⧉
+        </Link>
+      )}
+
       <div className="flex flex-wrap items-start gap-3">
         <div className="flex items-start gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-sm font-semibold text-white">
@@ -72,16 +82,6 @@ export function CommentCard({
             </a>
           )
         })}
-
-        {showPermalink && permalinkTo && (
-          <Link
-            to={permalinkTo}
-            className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 font-medium text-brand-100 transition hover:border-brand-400/50 hover:text-white"
-          >
-            <span className="text-base leading-none">🔗</span>
-            <span>Открыть</span>
-          </Link>
-        )}
 
         {showReplyAction && onReply && (
           <button
