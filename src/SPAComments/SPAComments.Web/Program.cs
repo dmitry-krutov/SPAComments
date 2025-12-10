@@ -18,19 +18,17 @@ builder.Services.AddCors(options =>
     options.AddPolicy("DefaultCors", policy =>
     {
         policy
-            .SetIsOriginAllowed(_ => true)
+            .AllowAnyOrigin()
             .AllowAnyHeader()
-            .AllowAnyMethod()
-            .AllowCredentials();
+            .AllowAnyMethod();
     });
 
     options.AddPolicy("SignalRPolicy", policy =>
     {
         policy
-            .SetIsOriginAllowed(_ => true)
+            .AllowAnyOrigin()
             .AllowAnyHeader()
-            .AllowAnyMethod()
-            .AllowCredentials();
+            .AllowAnyMethod();
     });
 });
 
