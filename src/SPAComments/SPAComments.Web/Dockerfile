@@ -1,6 +1,9 @@
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /src
 
+ARG GITHUB_PACKAGES_TOKEN
+ARG GITHUB_OWNER
+
 COPY ["Directory.Build.props", "Directory.Build.props"]
 COPY ["SPAComments.sln", "SPAComments.sln"]
 COPY ["src/SPAComments/SPAComments.Web/SPAComments.Web.csproj", "src/SPAComments/SPAComments.Web/"]
@@ -13,6 +16,12 @@ COPY ["src/SPAComments/CommentsModule/SPAComments.CommentsModule.Infrastructure/
 COPY ["src/SPAComments/CommentsModule/SPAComments.CommentsModule.Presentation/SPAComments.CommentsModule.Presentation.csproj", "src/SPAComments/CommentsModule/SPAComments.CommentsModule.Presentation/"]
 COPY ["src/SPAComments.FileService/src/FileService.Communication/FileService.Communication.csproj", "src/SPAComments.FileService/src/FileService.Communication/"]
 COPY ["src/SPAComments.FileService/src/FileService.Contracts/FileService.Contracts.csproj", "src/SPAComments.FileService/src/FileService.Contracts/"]
+
+RUN dotnet nuget add source "https://nuget.pkg.github.com/${GITHUB_OWNER}/index.json" \
+    -n github \
+    -u "${GITHUB_OWNER}" \
+    -p "${GITHUB_PACKAGES_TOKEN}" \
+    --store-password-in-clear-text
 
 RUN dotnet restore "SPAComments.sln"
 

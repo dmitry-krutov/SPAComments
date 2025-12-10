@@ -4,6 +4,9 @@ services:
     build:
       context: .
       dockerfile: src/SPAComments/SPAComments.Web/Dockerfile
+      args:
+        GITHUB_PACKAGES_TOKEN: ${GITHUB_PACKAGES_TOKEN}
+        GITHUB_OWNER: ${GITHUB_OWNER}
     restart: always
     environment:
       ASPNETCORE_ENVIRONMENT: Docker
@@ -28,6 +31,9 @@ services:
     build:
       context: ./src/SPAComments.FileService
       dockerfile: Dockerfile
+      args:
+        GITHUB_PACKAGES_TOKEN: ${GITHUB_PACKAGES_TOKEN}
+        GITHUB_OWNER: ${GITHUB_OWNER}
     restart: always
     environment:
       ASPNETCORE_ENVIRONMENT: Docker
