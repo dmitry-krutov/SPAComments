@@ -5,6 +5,7 @@ using SPAComments.CommentsModule.Application;
 using SPAComments.CommentsModule.Infrastructure;
 using SPAComments.CommentsModule.Presentation;
 using SPAComments.CommentsModule.Presentation.Hubs;
+using SPAComments.CommentsModule.Infrastructure.Seeding;
 using SPAComments.Core.Mappings;
 using SPAComments.Framework.Middlewares;
 
@@ -55,6 +56,8 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+await SeedCommentsAsync(app.Services);
+
 app.UseExceptionMiddleware();
 
 
@@ -74,7 +77,6 @@ app.UseCors("AllowAll");
 app.MapControllers();
 app.MapCaptchaEndpoints();
 app.MapHub<CommentsHub>("/hubs/comments").RequireCors("SignalRPolicy");
-;
 
 app.UseCors(policy =>
     policy.AllowAnyOrigin()
@@ -83,3 +85,10 @@ app.UseCors(policy =>
 );
 
 app.Run();
+
+async Task SeedCommentsAsync(IServiceProvider services)
+{
+    using var scope = services.CreateScope();
+    var seeder = scope.ServiceProvider.GetRequiredService<CommentsSeeder>();
+    await seeder.SeedAsync();
+}
