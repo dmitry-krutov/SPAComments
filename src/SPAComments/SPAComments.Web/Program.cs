@@ -1,5 +1,6 @@
 using FileService.Communication;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using SPAComments.CaptchaModule.Infrastructure;
 using SPAComments.CaptchaModule.Presentation;
 using SPAComments.CommentsModule.Application;
@@ -17,19 +18,34 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("DefaultCors", policy =>
     {
+        var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>();
+
         if (builder.Environment.IsEnvironment("Docker"))
         {
-            policy
-                .AllowAnyOrigin()
-                .AllowAnyHeader()
-                .AllowAnyMethod();
+            if (allowedOrigins?.Length > 0 && !allowedOrigins.Contains("*"))
+            {
+                policy
+                    .WithOrigins(allowedOrigins)
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowCredentials();
+            }
+            else
+            {
+                policy
+                    .SetIsOriginAllowed(_ => true)
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowCredentials();
+            }
         }
         else
         {
             policy
-                .AllowAnyOrigin()
+                .SetIsOriginAllowed(_ => true)
                 .AllowAnyHeader()
-                .AllowAnyMethod();
+                .AllowAnyMethod()
+                .AllowCredentials();
         }
     });
 
@@ -82,6 +98,7 @@ if (!app.Environment.IsEnvironment("Docker"))
     app.UseHttpsRedirection();
 }
 
+app.UseRouting();
 app.UseCors("DefaultCors");
 
 app.MapControllers();
