@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import PageLayout from '../components/PageLayout'
 import { searchComments } from '../features/comments/api'
@@ -41,31 +41,34 @@ function SearchResultsPage() {
 
   const totalPages = useMemo(() => Math.max(1, Math.ceil(state.totalCount / state.pageSize)), [state.totalCount, state.pageSize])
 
-  const runSearch = async (queryText: string, page = 1) => {
-    if (!queryText.trim()) {
-      setState((prev) => ({ ...prev, items: [], totalCount: 0, status: 'idle' }))
-      return
-    }
+  const runSearch = useCallback(
+    async (queryText: string, page = 1) => {
+      if (!queryText.trim()) {
+        setState((prev) => ({ ...prev, items: [], totalCount: 0, status: 'idle' }))
+        return
+      }
 
-    setState((prev) => ({ ...prev, status: 'loading', error: undefined }))
-    try {
-      const response = await searchComments({ text: queryText, page, pageSize: state.pageSize })
-      setState({
-        items: response.items,
-        page: response.page,
-        pageSize: response.pageSize,
-        totalCount: response.totalCount,
-        status: 'succeeded',
-      })
-    } catch (error) {
-      setState((prev) => ({ ...prev, status: 'failed', error: stringifyError(error) }))
-    }
-  }
+      setState((prev) => ({ ...prev, status: 'loading', error: undefined }))
+      try {
+        const response = await searchComments({ text: queryText, page, pageSize: state.pageSize })
+        setState({
+          items: response.items,
+          page: response.page,
+          pageSize: response.pageSize,
+          totalCount: response.totalCount,
+          status: 'succeeded',
+        })
+      } catch (error) {
+        setState((prev) => ({ ...prev, status: 'failed', error: stringifyError(error) }))
+      }
+    },
+    [state.pageSize]
+  )
 
   useEffect(() => {
     setSearchInput(decodedText)
     runSearch(decodedText, 1)
-  }, [decodedText])
+  }, [decodedText, runSearch])
 
   const handleSearchSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()

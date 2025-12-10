@@ -371,7 +371,6 @@ export function CommentForm({ parentId = null, onSubmitted, onCancel, heading, c
         )}
         {isUploading && <p className="text-xs text-slate-300">Подождите, пока завершится загрузка файлов.</p>}
         {submitError && <p className="text-xs text-rose-300">{submitError}</p>}
-        {submitStatus === 'succeeded' && <p className="text-xs text-emerald-200">Комментарий отправлен!</p>}
       </div>
     </form>
   )
