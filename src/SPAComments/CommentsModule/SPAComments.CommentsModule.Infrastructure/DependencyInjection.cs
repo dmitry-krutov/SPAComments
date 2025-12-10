@@ -10,6 +10,7 @@ using SPAComments.CommentsModule.Infrastructure.DbContexts;
 using SPAComments.CommentsModule.Infrastructure.Messaging;
 using SPAComments.CommentsModule.Infrastructure.Repositories;
 using SPAComments.CommentsModule.Infrastructure.Search;
+using SPAComments.CommentsModule.Infrastructure.Seeding;
 using SPAComments.Core.Abstractions;
 using SPAComments.Core.Security;
 
@@ -31,6 +32,8 @@ public static class DependencyInjection
         services.AddSingleton<IDateTimeProvider, SystemDateTimeProvider>();
 
         services.AddScoped<ICommentsRepository, CommentsRepository>();
+        services.AddScoped<CommentsSeeder>();
+        services.Configure<CommentsSeedingOptions>(configuration.GetSection("CommentsSeeding"));
 
         var connectionString = configuration.GetConnectionString("CommentsDb")
                                ?? throw new InvalidOperationException(
