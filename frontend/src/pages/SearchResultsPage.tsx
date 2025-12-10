@@ -3,17 +3,8 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import PageLayout from '../components/PageLayout'
 import { searchComments } from '../features/comments/api'
 import type { CommentSearchItemDto } from '../features/comments/types'
-import { ApiErrorResponse } from '../lib/apiClient'
+import { formatUnknownError } from '../lib/apiClient'
 import { formatDate } from '../lib/formatDate'
-
-const stringifyError = (error: unknown) => {
-  if (error instanceof ApiErrorResponse) {
-    return error.errors.map((e) => e.message).join('; ')
-  }
-
-  if (error instanceof Error) return error.message
-  return 'Не удалось выполнить поиск'
-}
 
 interface SearchState {
   items: CommentSearchItemDto[]
@@ -59,7 +50,11 @@ function SearchResultsPage() {
           status: 'succeeded',
         })
       } catch (error) {
-        setState((prev) => ({ ...prev, status: 'failed', error: stringifyError(error) }))
+        setState((prev) => ({
+          ...prev,
+          status: 'failed',
+          error: formatUnknownError(error, 'Не удалось выполнить поиск'),
+        }))
       }
     },
     [state.pageSize]

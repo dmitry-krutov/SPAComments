@@ -4,16 +4,7 @@ import CommentCard from '../components/CommentCard'
 import PageLayout from '../components/PageLayout'
 import { getCommentById } from '../features/comments/api'
 import type { CommentDto } from '../features/comments/types'
-import { ApiErrorResponse } from '../lib/apiClient'
-
-const stringifyError = (error: unknown) => {
-  if (error instanceof ApiErrorResponse) {
-    return error.errors.map((e) => e.message).join('; ')
-  }
-
-  if (error instanceof Error) return error.message
-  return 'Не удалось загрузить комментарий'
-}
+import { formatUnknownError } from '../lib/apiClient'
 
 type LoadState = 'idle' | 'loading' | 'succeeded' | 'failed'
 
@@ -34,7 +25,7 @@ function CommentDetailsPage() {
         setStatus('succeeded')
       } catch (err) {
         setStatus('failed')
-        setError(stringifyError(err))
+        setError(formatUnknownError(err, 'Не удалось загрузить комментарий'))
       }
     }
 
