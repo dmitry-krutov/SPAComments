@@ -1,9 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using SPAComments.CommentsModule.Application.Events.Integration;
 using SPAComments.CommentsModule.Domain;
 using SPAComments.CommentsModule.Domain.ValueObjects;
 using SPAComments.CommentsModule.Infrastructure.DbContexts;
+using SPAComments.CommentsModule.Infrastructure.Search;
 using SPAComments.Core.Abstractions;
 using SPAComments.SharedKernel.ValueObjects.Ids;
 
@@ -15,17 +17,20 @@ public sealed class CommentsSeeder
     private readonly IDateTimeProvider _dateTimeProvider;
     private readonly ILogger<CommentsSeeder> _logger;
     private readonly IOptions<CommentsSeedingOptions> _options;
+    private readonly ICommentSearchIndexer _searchIndexer;
 
     public CommentsSeeder(
         CommentsDbContext context,
         IDateTimeProvider dateTimeProvider,
         ILogger<CommentsSeeder> logger,
-        IOptions<CommentsSeedingOptions> options)
+        IOptions<CommentsSeedingOptions> options,
+        ICommentSearchIndexer searchIndexer)
     {
         _context = context;
         _dateTimeProvider = dateTimeProvider;
         _logger = logger;
         _options = options;
+        _searchIndexer = searchIndexer;
     }
 
     public async Task SeedAsync(CancellationToken cancellationToken = default)
@@ -54,6 +59,8 @@ public sealed class CommentsSeeder
 
         await _context.Comments.AddRangeAsync(comments, cancellationToken);
         await _context.SaveChangesAsync(cancellationToken);
+
+        await IndexCommentsAsync(comments, cancellationToken);
 
         _logger.LogInformation("Seeded {Count} comments", comments.Count);
     }
@@ -188,4 +195,36 @@ public sealed class CommentsSeeder
         string? HomePage,
         string Text,
         DateTime CreatedAt);
+
+    private async Task IndexCommentsAsync(
+        IReadOnlyCollection<Comment> comments,
+        CancellationToken cancellationToken)
+    {
+        foreach (var comment in comments)
+        {
+            var integrationEvent = new CommentCreatedIntegrationEvent(
+                comment.Id.Value,
+                comment.ParentCommentId?.Value,
+                comment.UserName.Value,
+                comment.Email.Value,
+                comment.HomePage?.Value,
+                comment.Text.Value,
+                comment.CreatedAt,
+                comment.Attachments.Select(a => a.FileId).ToArray());
+
+            try
+            {
+                await _searchIndexer.IndexAsync(integrationEvent, cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(
+                    ex,
+                    "Failed to index seeded comment {CommentId}",
+                    comment.Id.Value);
+            }
+        }
+
+        _logger.LogInformation("Indexed {Count} comments into Elasticsearch", comments.Count);
+    }
 }
