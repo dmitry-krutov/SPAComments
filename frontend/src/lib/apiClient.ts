@@ -126,7 +126,8 @@ export function formatUnknownError(error: unknown, fallbackMessage: string) {
 const defaultErrorMessage = 'Не удалось выполнить запрос'
 
 function buildUrl(path: string) {
-  return `${config.apiBaseUrl}${path}`
+  const normalizedPath = path.startsWith('/') ? path : `/${path}`
+  return `${config.apiBaseUrl}${normalizedPath}`
 }
 
 export async function apiFetch<T>(path: string, options: RequestInit = {}): Promise<T> {
