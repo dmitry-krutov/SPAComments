@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, type PayloadAction } from '@reduxjs/toolkit'
 import { RootState } from '../../app/store'
-import { ApiErrorResponse } from '../../lib/apiClient'
+import { formatUnknownError } from '../../lib/apiClient'
 import { getLatestComments } from './api'
 import type { CommentDto, PagedResult } from './types'
 
@@ -21,18 +21,6 @@ const initialState: CommentFeedState = {
   status: 'idle',
 }
 
-const stringifyError = (error: unknown) => {
-  if (error instanceof ApiErrorResponse) {
-    return error.errors.map((e) => e.message).join('; ')
-  }
-
-  if (error instanceof Error) {
-    return error.message
-  }
-
-  return 'Не удалось загрузить комментарии'
-}
-
 export const fetchLatestComments = createAsyncThunk<
   PagedResult<CommentDto>,
   { page?: number } | undefined,
@@ -44,7 +32,7 @@ export const fetchLatestComments = createAsyncThunk<
   try {
     return await getLatestComments({ page, pageSize: state.pageSize })
   } catch (error) {
-    return rejectWithValue(stringifyError(error))
+    return rejectWithValue(formatUnknownError(error, 'Не удалось загрузить комментарии'))
   }
 })
 

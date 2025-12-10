@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState, type ChangeEvent, type DragEvent, type FormEvent } from 'react'
-import { ApiErrorResponse } from '../lib/apiClient'
+import { ApiErrorResponse, formatUnknownError } from '../lib/apiClient'
 import { createComment, getCaptcha, uploadCommentAttachment } from '../features/comments/api'
 import type { CaptchaResponse, CommentDto, UploadCommentAttachmentResult } from '../features/comments/types'
 
@@ -15,20 +15,6 @@ const formatSize = (size: number) => {
   if (size < 1024) return `${size} Б`
   if (size < 1024 * 1024) return `${(size / 1024).toFixed(1)} КБ`
   return `${(size / (1024 * 1024)).toFixed(1)} МБ`
-}
-
-const stringifyError = (error: unknown) => {
-  if (error instanceof ApiErrorResponse) {
-    return error.errors
-      .map((err) => (err.invalidField ? `${err.invalidField}: ${err.message}` : err.message))
-      .join('; ')
-  }
-
-  if (error instanceof Error) {
-    return error.message
-  }
-
-  return 'Не удалось выполнить запрос'
 }
 
 interface AttachmentItem {
@@ -79,7 +65,7 @@ export function CommentForm({ parentId = null, onSubmitted, onCancel, heading, c
       const data = await getCaptcha()
       setCaptcha({ status: 'succeeded', data, error: undefined })
     } catch (error) {
-      setCaptcha({ status: 'failed', error: stringifyError(error) })
+      setCaptcha({ status: 'failed', error: formatUnknownError(error, 'Не удалось загрузить капчу') })
     }
   }, [])
 
@@ -113,7 +99,7 @@ export function CommentForm({ parentId = null, onSubmitted, onCancel, heading, c
         setAttachments((prev) =>
           prev.map((item) =>
             item.localId === localId
-              ? { ...item, status: 'failed', error: stringifyError(error) }
+              ? { ...item, status: 'failed', error: formatUnknownError(error, 'Не удалось загрузить файл') }
               : item
           )
         )
@@ -188,7 +174,12 @@ export function CommentForm({ parentId = null, onSubmitted, onCancel, heading, c
       onSubmitted(merged)
     } catch (error) {
       setSubmitStatus('failed')
-      setSubmitError(stringifyError(error))
+      if (error instanceof ApiErrorResponse && error.errors.some((item) => item.code === 'captcha.invalid')) {
+        refreshCaptcha()
+        setForm((prev) => ({ ...prev, captchaAnswer: '' }))
+      }
+
+      setSubmitError(formatUnknownError(error, 'Не удалось отправить комментарий'))
     }
   }
 

@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { RootState } from '../../app/store'
-import { ApiErrorResponse } from '../../lib/apiClient'
+import { formatUnknownError } from '../../lib/apiClient'
 import { createComment, getCaptcha, uploadCommentAttachment } from './api'
 import type {
   CaptchaResponse,
@@ -43,27 +43,13 @@ const initialState: CommentFormState = {
   submit: { status: 'idle' },
 }
 
-const stringifyError = (error: unknown) => {
-  if (error instanceof ApiErrorResponse) {
-    return error.errors
-      .map((err) => (err.invalidField ? `${err.invalidField}: ${err.message}` : err.message))
-      .join('; ')
-  }
-
-  if (error instanceof Error) {
-    return error.message
-  }
-
-  return 'Не удалось выполнить запрос'
-}
-
 export const fetchCaptcha = createAsyncThunk<CaptchaResponse, void, { rejectValue: string }>(
   'commentForm/fetchCaptcha',
   async (_, { rejectWithValue }) => {
     try {
       return await getCaptcha()
     } catch (error) {
-      return rejectWithValue(stringifyError(error))
+      return rejectWithValue(formatUnknownError(error, 'Не удалось загрузить капчу'))
     }
   }
 )
@@ -82,7 +68,7 @@ export const uploadAttachment = createAsyncThunk<
     const response = await uploadCommentAttachment(file)
     return { localId, file, response }
   } catch (error) {
-    return rejectWithValue(stringifyError(error))
+    return rejectWithValue(formatUnknownError(error, 'Не удалось загрузить файл'))
   }
 })
 
@@ -122,7 +108,7 @@ export const submitComment = createAsyncThunk<CommentDto, SubmitCommentArgs, { r
 
       return await createComment(request)
     } catch (error) {
-      return rejectWithValue(stringifyError(error))
+      return rejectWithValue(formatUnknownError(error, 'Не удалось отправить комментарий'))
     }
   }
 )
