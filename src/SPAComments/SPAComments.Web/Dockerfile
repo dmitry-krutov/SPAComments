@@ -1,8 +1,3 @@
-# Build and publish SPAComments modular monolith
-FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
-WORKDIR /app
-EXPOSE 8080
-
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /src
 
@@ -22,11 +17,11 @@ COPY ["src/SPAComments.FileService/src/FileService.Contracts/FileService.Contrac
 RUN dotnet restore "SPAComments.sln"
 
 COPY . .
-
 RUN dotnet publish "src/SPAComments/SPAComments.Web/SPAComments.Web.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
-FROM base AS final
+FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS final
 WORKDIR /app
+ENV ASPNETCORE_URLS=http://0.0.0.0:8080
 COPY --from=build /app/publish .
-ENV ASPNETCORE_URLS=http://+:8080
+EXPOSE 8080
 ENTRYPOINT ["dotnet", "SPAComments.Web.dll"]
