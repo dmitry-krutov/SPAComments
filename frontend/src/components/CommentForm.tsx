@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState, type ChangeEvent, type DragEvent, type FormEvent } from 'react'
-import { formatUnknownError } from '../lib/apiClient'
+import { ApiErrorResponse, formatUnknownError } from '../lib/apiClient'
 import { createComment, getCaptcha, uploadCommentAttachment } from '../features/comments/api'
 import type { CaptchaResponse, CommentDto, UploadCommentAttachmentResult } from '../features/comments/types'
 
@@ -174,6 +174,11 @@ export function CommentForm({ parentId = null, onSubmitted, onCancel, heading, c
       onSubmitted(merged)
     } catch (error) {
       setSubmitStatus('failed')
+      if (error instanceof ApiErrorResponse && error.errors.some((item) => item.code === 'captcha.invalid')) {
+        refreshCaptcha()
+        setForm((prev) => ({ ...prev, captchaAnswer: '' }))
+      }
+
       setSubmitError(formatUnknownError(error, 'Не удалось отправить комментарий'))
     }
   }
