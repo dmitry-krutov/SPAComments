@@ -49,6 +49,12 @@ public sealed class CommentsSeeder
             await _context.SaveChangesAsync(cancellationToken);
         }
 
+        if (options.ClearElasticsearchBeforeSeeding)
+        {
+            _logger.LogInformation("Clearing Elasticsearch index before seeding");
+            await _searchIndexer.ClearAsync(cancellationToken);
+        }
+
         if (await _context.Comments.AnyAsync(cancellationToken))
         {
             _logger.LogInformation("Comments already exist. Seeding skipped");
@@ -94,10 +100,9 @@ public sealed class CommentsSeeder
 
         var names = new[]
         {
-            "Aurora7", "Borealis88", "Cascade19", "DeltaPilot", "Everest09", "Fjord27",
-            "Glider33", "Helios54", "Icarus21", "Juniper11", "Krypton42", "Lumen73",
-            "Meridian5", "Nimbus92", "Orchid16", "Pulse40", "Quartz58", "Riverine2",
-            "Solstice7", "Tundra64", "Umbra81", "Vortex14", "Willow38", "Xenon67",
+            "Aurora7", "Borealis88", "Cascade19", "DeltaPilot", "Everest09", "Fjord27", "Glider33", "Helios54",
+            "Icarus21", "Juniper11", "Krypton42", "Lumen73", "Meridian5", "Nimbus92", "Orchid16", "Pulse40",
+            "Quartz58", "Riverine2", "Solstice7", "Tundra64", "Umbra81", "Vortex14", "Willow38", "Xenon67",
             "Yukon25", "Zephyr03"
         };
 
@@ -105,8 +110,7 @@ public sealed class CommentsSeeder
         var homePages = new[]
         {
             "https://labs.example.com", "https://portfolio.dev/works", "http://tech-journal.ru",
-            "https://notes.space", "http://about.me/projects", "https://studio.codes" ,
-            "https://quiet-sky.blog"
+            "https://notes.space", "http://about.me/projects", "https://studio.codes", "https://quiet-sky.blog"
         };
 
         var comments = new List<SeedComment>();
@@ -123,7 +127,8 @@ public sealed class CommentsSeeder
         {
             var availableParents = parents.Where(p => p.Depth < 3).ToArray();
             var parent = availableParents[random.Next(availableParents.Length)];
-            var seed = CreateSeedComment(parent.Comment.Id, parent.Depth + 1, i + 20, now, random, sentences, names, domains, homePages);
+            var seed = CreateSeedComment(parent.Comment.Id, parent.Depth + 1, i + 20, now, random, sentences, names,
+                domains, homePages);
             comments.Add(seed);
             parents.Add((seed, parent.Depth + 1));
         }

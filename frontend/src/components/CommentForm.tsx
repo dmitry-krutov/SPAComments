@@ -1,4 +1,5 @@
 import { useCallback, useMemo, useState, type ChangeEvent, type DragEvent, type FormEvent } from 'react'
+import { nanoid } from 'nanoid'
 import { ApiErrorResponse, formatUnknownError } from '../lib/apiClient'
 import { createComment, getCaptcha, uploadCommentAttachment } from '../features/comments/api'
 import type { CaptchaResponse, CommentDto, UploadCommentAttachmentResult } from '../features/comments/types'
@@ -71,7 +72,7 @@ export function CommentForm({ parentId = null, onSubmitted, onCancel, heading, c
 
   const uploadFiles = useCallback((files: FileList) => {
     Array.from(files).forEach(async (file) => {
-      const localId = crypto.randomUUID()
+      const localId = nanoid()
       setAttachments((prev) => [...prev, { localId, fileName: file.name, size: file.size, status: 'uploading' }])
 
       try {

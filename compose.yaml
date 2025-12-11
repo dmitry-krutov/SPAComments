@@ -1,48 +1,70 @@
 services:
-#  spa-comments:
-#    container_name: spa-comments
-#    build:
-#      context: .
-#      dockerfile: src/SPAComments/SPAComments.Web/Dockerfile
-#    restart: always
-#    environment:
-#      ASPNETCORE_ENVIRONMENT: Docker
-#      ASPNETCORE_URLS: http://+:8080
-#      ConnectionStrings__CommentsDb: Host=postgres;Port=5432;Database=app_db;Username=postgres;Password=postgres
-#      ConnectionStrings__Redis: redis:6379
-#      ConnectionStrings__RabbitMq: amqp://guest:guest@rabbitmq:5672
-#      FileService__BaseAddress: http://file-service:8081
-#      Elasticsearch__Url: http://elasticsearch:9200
-#      Elasticsearch__CommentsIndex: spa-comments-comments
-#    ports:
-#      - "8080:8080"
-#    depends_on:
-#      - postgres
-#      - redis
-#      - rabbitmq
-#      - elasticsearch
-#      - file-service
+  backend:
+    container_name: spa-comments-backend
+    build:
+      context: .
+      dockerfile: src/SPAComments/SPAComments.Web/Dockerfile
+      args:
+        GITHUB_PACKAGES_TOKEN: ${GITHUB_PACKAGES_TOKEN}
+        GITHUB_OWNER: ${GITHUB_OWNER}
+    restart: always
+    environment:
+      ASPNETCORE_ENVIRONMENT: Docker
+      ASPNETCORE_URLS: http://+:8080
+      ConnectionStrings__CommentsDb: Host=postgres;Port=5432;Database=app_db;Username=postgres;Password=postgres
+      ConnectionStrings__Redis: redis:6379
+      ConnectionStrings__RabbitMq: amqp://guest:guest@rabbitmq:5672
+      FileService__BaseAddress: http://file-service:8081
+      Elasticsearch__Url: http://elasticsearch:9200
+      Elasticsearch__CommentsIndex: spa-comments-comments
+    expose:
+      - "8080"
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+      postgres:
+        condition: service_started
+      redis:
+        condition: service_started
+      rabbitmq:
+        condition: service_started
+      file-service:
+        condition: service_started
 
-#  file-service:
-#    container_name: file-service
-#    build:
-#      context: ./src/SPAComments.FileService
-#      dockerfile: Dockerfile
-#    restart: always
-#    environment:
-#      ASPNETCORE_ENVIRONMENT: Docker
-#      ASPNETCORE_URLS: http://+:8081
-#      ConnectionStrings__Mongo: mongodb://mongo:27017
-#      Minio__Bucket: spa-comments
-#      Minio__Endpoint: http://minio:9000
-#      Minio__AccessKey: minioadmin
-#      Minio__SecretKey: minioadmin
-#      Minio__WithSsl: "false"
-#    ports:
-#      - "8081:8081"
-#    depends_on:
-#      - mongo
-#      - minio
+  file-service:
+    container_name: file-service
+    build:
+      context: ./src/SPAComments.FileService
+      dockerfile: Dockerfile
+      args:
+        GITHUB_PACKAGES_TOKEN: ${GITHUB_PACKAGES_TOKEN}
+        GITHUB_OWNER: ${GITHUB_OWNER}
+    restart: always
+    environment:
+      ASPNETCORE_ENVIRONMENT: Docker
+      ASPNETCORE_URLS: http://+:8081
+      ConnectionStrings__Mongo: mongodb://mongo:27017
+      Minio__Bucket: spa-comments
+      Minio__Endpoint: http://minio:9000
+      Minio__AccessKey: minioadmin
+      Minio__SecretKey: minioadmin
+      Minio__WithSsl: "false"
+    expose:
+      - "8081"
+    depends_on:
+      - mongo
+      - minio
+
+  frontend:
+    container_name: spa-comments-frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
 
   postgres:
     container_name: postgres
@@ -99,6 +121,11 @@ services:
       - "9200:9200"
     volumes:
       - es-data:/usr/share/elasticsearch/data
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -s http://localhost:9200/_cluster/health | grep -vq '\"status\":\"red\"'" ]
+      interval: 10s
+      timeout: 10s
+      retries: 20
 
   minio:
     container_name: minio
