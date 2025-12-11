@@ -40,7 +40,7 @@ services:
       ASPNETCORE_URLS: http://+:8081
       ConnectionStrings__Mongo: mongodb://mongo:27017
       Minio__Bucket: spa-comments
-      Minio__Endpoint: http://138.199.224.156:9000
+      Minio__Endpoint: http://minio:9000
       Minio__AccessKey: minioadmin
       Minio__SecretKey: minioadmin
       Minio__WithSsl: "false"

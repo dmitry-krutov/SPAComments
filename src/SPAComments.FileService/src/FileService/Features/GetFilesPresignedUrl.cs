@@ -1,6 +1,4 @@
-﻿using Amazon.S3;
-using Amazon.S3.Model;
-using FileService.Contracts;
+﻿using FileService.Contracts;
 using FileService.Endpoints;
 using FileService.MongoDataAccess;
 using Microsoft.AspNetCore.Mvc;
@@ -23,7 +21,6 @@ public static class GetFilesPresignedUrl
         private static async Task<EndpointResult<GetFilesPresignedUrlResponse>> Handler(
             [FromBody] GetFilesPresignedUrlRequest request,
             IFilesRepository filesRepository,
-            IAmazonS3 s3Client,
             IOptions<MinioOptions> minioOptions,
             CancellationToken cancellationToken)
         {
@@ -33,7 +30,9 @@ public static class GetFilesPresignedUrl
                     .FromErrors(Errors.Files.FailGetPresignedUrl().ToErrorList());
             }
 
-            var bucket = minioOptions.Value.Bucket;
+            var options = minioOptions.Value;
+            var bucket = options.Bucket;
+            var publicBaseUrl = options.PublicBaseUrl.TrimEnd('/');
 
             var files = await filesRepository.Get(request.FileIds, cancellationToken);
 
@@ -43,32 +42,18 @@ public static class GetFilesPresignedUrl
                     .FromErrors(Errors.Files.FailGetPresignedUrl().ToErrorList());
             }
 
-            var now = DateTime.UtcNow;
-            var expiresAtUtc = now.AddSeconds(request.TtlSeconds);
-
             var result = new List<FilePresignedUrlDto>(files.Count);
 
             foreach (var file in files)
             {
-                try
-                {
-                    var presignedRequest = new GetPreSignedUrlRequest
-                    {
-                        BucketName = bucket,
-                        Key = file.StoragePath,
-                        Expires = expiresAtUtc,
-                        Protocol = Protocol.HTTP
-                    };
+                var url = $"{publicBaseUrl}/{bucket}/{file.StoragePath}";
 
-                    var url = s3Client.GetPreSignedURL(presignedRequest);
-
-                    result.Add(new FilePresignedUrlDto { FileId = file.Id, Url = url, ExpiresAtUtc = expiresAtUtc });
-                }
-                catch
+                result.Add(new FilePresignedUrlDto
                 {
-                    return EndpointResult<GetFilesPresignedUrlResponse>
-                        .FromErrors(Errors.Files.FailGetPresignedUrl().ToErrorList());
-                }
+                    FileId = file.Id,
+                    Url = url,
+                    ExpiresAtUtc = DateTime.MaxValue
+                });
             }
 
             var response = new GetFilesPresignedUrlResponse { Files = result };
