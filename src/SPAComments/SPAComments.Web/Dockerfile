@@ -30,6 +30,16 @@ RUN dotnet publish "src/SPAComments/SPAComments.Web/SPAComments.Web.csproj" -c R
 
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS final
 WORKDIR /app
+RUN apt-get update && apt-get install -y \
+    libfontconfig1 \
+    libfreetype6 \
+    libharfbuzz0b \
+    libpng16-16 \
+    libjpeg62-turbo \
+    libx11-6 \
+    libxext6 \
+    libxrender1 \
+    && rm -rf /var/lib/apt/lists/*
 ENV ASPNETCORE_URLS=http://0.0.0.0:8080
 COPY --from=build /app/publish .
 EXPOSE 8080
