@@ -51,7 +51,7 @@ public sealed class CommentSearchIndexer : ICommentSearchIndexer
 
     public async Task ClearAsync(CancellationToken ct)
     {
-        var response = await _client.Indices.DeleteAsync(_indexName, ct: ct);
+        var response = await _client.Indices.DeleteAsync(_indexName, ct);
 
         if (response.IsValidResponse || response.ApiCallDetails?.HttpStatusCode == 404)
         {
