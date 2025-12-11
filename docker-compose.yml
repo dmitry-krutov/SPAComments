@@ -20,11 +20,16 @@ services:
     expose:
       - "8080"
     depends_on:
-      - postgres
-      - redis
-      - rabbitmq
-      - elasticsearch
-      - file-service
+      elasticsearch:
+        condition: service_healthy
+      postgres:
+        condition: service_started
+      redis:
+        condition: service_started
+      rabbitmq:
+        condition: service_started
+      file-service:
+        condition: service_started
 
   file-service:
     container_name: file-service
@@ -116,6 +121,11 @@ services:
       - "9200:9200"
     volumes:
       - es-data:/usr/share/elasticsearch/data
+    healthcheck:
+      test: ["CMD-SHELL", "curl -s http://localhost:9200/_cluster/health | grep -vq '"status":"red"'"]
+      interval: 10s
+      timeout: 10s
+      retries: 20
 
   minio:
     container_name: minio
