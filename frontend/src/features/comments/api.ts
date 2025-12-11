@@ -8,16 +8,16 @@ import type {
   UploadCommentAttachmentResult,
 } from './types'
 
-export const getCaptcha = () => apiFetch<CaptchaResponse>('/api/captcha')
+export const getCaptcha = () => apiFetch<CaptchaResponse>('/captcha')
 
 export const uploadCommentAttachment = (file: File) => {
   const formData = new FormData()
   formData.append('file', file)
-  return apiFetchForm<UploadCommentAttachmentResult>('/api/Comments/attachments', formData)
+  return apiFetchForm<UploadCommentAttachmentResult>('/Comments/attachments', formData)
 }
 
 export const createComment = (payload: CreateCommentRequest) =>
-  apiFetch<CommentDto>('/api/Comments', {
+  apiFetch<CommentDto>('/Comments', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -31,7 +31,7 @@ interface LatestCommentsParams {
 }
 
 export const getLatestComments = ({ page, pageSize }: LatestCommentsParams) =>
-  apiFetch<PagedResult<CommentDto>>(`/api/Comments?page=${page}&pageSize=${pageSize}`)
+  apiFetch<PagedResult<CommentDto>>(`/Comments?page=${page}&pageSize=${pageSize}`)
 
 interface SearchCommentsParams {
   text: string
@@ -40,7 +40,7 @@ interface SearchCommentsParams {
 }
 
 export const searchComments = ({ text, page = 1, pageSize = 10 }: SearchCommentsParams) =>
-  apiFetch<PagedResult<CommentSearchItemDto>>('/api/Comments/search', {
+  apiFetch<PagedResult<CommentSearchItemDto>>('/Comments/search', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -48,4 +48,4 @@ export const searchComments = ({ text, page = 1, pageSize = 10 }: SearchComments
     body: JSON.stringify({ text, page, pageSize }),
   })
 
-export const getCommentById = (id: string) => apiFetch<CommentDto>(`/api/Comments/${id}`)
+export const getCommentById = (id: string) => apiFetch<CommentDto>(`/Comments/${id}`)

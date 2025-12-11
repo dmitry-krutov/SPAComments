@@ -63,7 +63,7 @@ function CommentsPage() {
 
   useEffect(() => {
     const connection = new HubConnectionBuilder()
-      .withUrl(`${config.apiBaseUrl}/hubs/comments`)
+      .withUrl(config.signalRUrl)
       .withAutomaticReconnect()
       .configureLogging(LogLevel.Error)
       .build()

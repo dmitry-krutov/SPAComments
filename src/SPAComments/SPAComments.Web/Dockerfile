@@ -1,10 +1,8 @@
-# Build and publish SPAComments modular monolith
-FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
-WORKDIR /app
-EXPOSE 8080
-
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /src
+
+ARG GITHUB_PACKAGES_TOKEN
+ARG GITHUB_OWNER
 
 COPY ["Directory.Build.props", "Directory.Build.props"]
 COPY ["SPAComments.sln", "SPAComments.sln"]
@@ -19,14 +17,30 @@ COPY ["src/SPAComments/CommentsModule/SPAComments.CommentsModule.Presentation/SP
 COPY ["src/SPAComments.FileService/src/FileService.Communication/FileService.Communication.csproj", "src/SPAComments.FileService/src/FileService.Communication/"]
 COPY ["src/SPAComments.FileService/src/FileService.Contracts/FileService.Contracts.csproj", "src/SPAComments.FileService/src/FileService.Contracts/"]
 
+RUN dotnet nuget add source "https://nuget.pkg.github.com/${GITHUB_OWNER}/index.json" \
+    -n github \
+    -u "${GITHUB_OWNER}" \
+    -p "${GITHUB_PACKAGES_TOKEN}" \
+    --store-password-in-clear-text
+
 RUN dotnet restore "SPAComments.sln"
 
 COPY . .
-
 RUN dotnet publish "src/SPAComments/SPAComments.Web/SPAComments.Web.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
-FROM base AS final
+FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS final
 WORKDIR /app
+RUN apt-get update && apt-get install -y \
+    libfontconfig1 \
+    libfreetype6 \
+    libharfbuzz0b \
+    libpng16-16 \
+    libjpeg62-turbo \
+    libx11-6 \
+    libxext6 \
+    libxrender1 \
+    && rm -rf /var/lib/apt/lists/*
+ENV ASPNETCORE_URLS=http://0.0.0.0:8080
 COPY --from=build /app/publish .
-ENV ASPNETCORE_URLS=http://+:8080
+EXPOSE 8080
 ENTRYPOINT ["dotnet", "SPAComments.Web.dll"]

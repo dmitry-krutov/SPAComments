@@ -48,4 +48,20 @@ public sealed class CommentSearchIndexer : ICommentSearchIndexer
                 response.DebugInformation);
         }
     }
+
+    public async Task ClearAsync(CancellationToken ct)
+    {
+        var response = await _client.Indices.DeleteAsync(_indexName, ct);
+
+        if (response.IsValidResponse || response.ApiCallDetails?.HttpStatusCode == 404)
+        {
+            _logger.LogInformation("Cleared Elasticsearch index {IndexName}", _indexName);
+            return;
+        }
+
+        _logger.LogError(
+            "Failed to clear Elasticsearch index {IndexName}. Details: {Details}",
+            _indexName,
+            response.DebugInformation);
+    }
 }
