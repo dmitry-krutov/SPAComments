@@ -49,6 +49,12 @@ public sealed class CommentsSeeder
             await _context.SaveChangesAsync(cancellationToken);
         }
 
+        if (options.ClearElasticsearchBeforeSeeding)
+        {
+            _logger.LogInformation("Clearing Elasticsearch index before seeding");
+            await _searchIndexer.ClearAsync(cancellationToken);
+        }
+
         if (await _context.Comments.AnyAsync(cancellationToken))
         {
             _logger.LogInformation("Comments already exist. Seeding skipped");
